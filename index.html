@@ -47,9 +47,6 @@
 
   .score{ font-weight:700; margin-left:auto; color:#eaf6ff }
 
-  /* rules */
-  .rules{ position:fixed; right:18px; top:120px; width:300px; padding:12px; border-radius:12px; background:var(--panel); border:1px solid var(--glass); box-shadow:0 12px 32px rgba(0,0,0,0.45); z-index:6 }
-  .rules h4{ margin:0 0 10px 0 }
 
   /* toast */
   .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:34px; background:rgba(0,0,0,0.6); padding:12px 18px; border-radius:999px; color:white; font-weight:700; opacity:0; transition:opacity .2s; z-index:99 }
@@ -67,7 +64,6 @@
     main.container{ flex-direction:column; max-width:95vw }
     .left-col, .right-col{ width:100% }
     .assembly-area{ min-height:360px; justify-content:center; flex-wrap:wrap }
-    .rules{ position:static; width:100%; margin:12px auto; }
   }
   /* Container que cobre toda a viewport */
 .bubbles {
@@ -322,11 +318,7 @@ body {
     flex-wrap: wrap;
     justify-content: center;
   }
-  .rules {
-    position: static;
-    width: 100%;
-    margin-top: 12px;
-  }
+
   .controls {
     flex-direction: column;
     gap: 8px;
@@ -401,9 +393,6 @@ body {
   .score { font-size: 0.9rem; }
   #volume-slider { width: 80px; }
 
-  /* regras somem p/ ganhar altura */
-  .rules { display: none !important; }
-
   /* créditos menores e não fixos (evita sobreposição) */
   .credits {
     position: static;
@@ -420,7 +409,19 @@ body {
   header h1 { font-size: clamp(0.82rem, 3vw, 1rem); }
 }
 
+#timer {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: rgba(0,0,0,0.4);
+  padding: 5px 10px;
+  border-radius: 8px;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
   
+}
 </style>
 </head>
 
@@ -457,6 +458,9 @@ body {
 </script>
 
 <body>
+
+  <div id="timer">Tempo: 30s</div>
+
 
    <div class="bubbles">
   <div class="bubble"></div>
@@ -552,16 +556,6 @@ body {
       </div>
     </aside>
   </main>
-
-  <aside class="rules panel" role="note">
-    <h4>Regras</h4>
-    <ol>
-      <li>Monte a sequência: Produtor → Primário → Secundário → Terciário.</li>
-      <li>As cartas iniciais são 1 aleatória de cada nível e aparecem embaralhadas.</li>
-      <li>Arraste e reordene dentro da área de montagem.</li>
-      <li>Cada acerto soma +1 ponto. Após verificar, um novo conjunto será gerado.</li>
-    </ol>
-  </aside>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div class="credits">Feito por Murilo Gonçalves Bastos e Sergio Otavio Martins Coelho</div>
@@ -725,6 +719,43 @@ function generateDeckAndRender(){
   enableSortables();
 }
 
+let timeLeft = 5;
+let timerInterval;
+
+function startTimer() {
+  clearInterval(timerInterval); // evita timers duplicados
+  timeLeft = 5;
+  document.getElementById("timer").textContent = `Tempo: ${timeLeft}s`;
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById("timer").textContent = `Tempo: ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+
+      // verifica a cadeia antes de resetar
+      const placed = Array.from(dropZone.querySelectorAll('.card'));
+      if (placed.length === 4) {
+        verifyChain(); // se tiver 4 cartas, verifica normalmente
+      } else {
+        showToast('Tempo esgotado! Coloque 4 cartas para verificar.');
+        playSound('wrong');
+      }
+
+      // espera 1 segundo para mostrar o feedback antes de reiniciar
+      setTimeout(() => {
+        generateDeckAndRender(); // cria novo deck
+        startTimer(); // reinicia o timer
+      }, 1000);
+    }
+  }, 1000);
+}
+
+// inicia timer quando o jogo começar
+startTimer();
+
+
 /* Sortable (drag & drop + reorder) */
 let sortableCards, sortableAssembly;
 function enableSortables(){
@@ -824,7 +855,6 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
-
 
 
 
