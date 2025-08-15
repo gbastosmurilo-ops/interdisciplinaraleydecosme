@@ -349,57 +349,75 @@ body {
   }
 }
 
-  /* Ajuste para celulares em horizontal com pouca altura */
-@media (max-height: 500px) and (orientation: landscape) {
+  /* ===== MOBILE HORIZONTAL (ajustes suaves) ===== */
+@media (orientation: landscape) and (max-height: 520px) {
+  /* rolagem vertical permitida, sem zoom forçado */
   html, body {
-    overflow: hidden; /* remove rolagem */
-    height: 100vh;
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto !important;
   }
+  body { transform: none !important; }
 
-  /* Esconde as regras */
-  .rules {
-    display: none !important;
-  }
-
-  /* Reduz título */
+  /* header compacto e sem margens "forçadas" */
+  header { padding: 8px 12px; gap: 8px; }
+  .logo-container { position: static; width: 56px; }
   header h1 {
-    font-size: 1rem;
-    margin: 4px 0;
+    margin: 0 !important;
+    font-size: clamp(0.9rem, 3.2vw, 1.1rem);
+  }
+  header .subtitle {
+    margin: 0 !important;
+    font-size: clamp(0.68rem, 2.4vw, 0.9rem);
   }
 
-  /* Área de cartas mais compacta */
-  .cards-area {
-    gap: 4px;
-    padding: 4px;
-  }
+  /* layout mais elástico nas colunas */
+  main.container { gap: 12px; margin: 8px 0 18px 0; padding: 8px 10px; }
+  .left-col  { flex: 1 1 60%; gap: 8px; }
+  .right-col { flex: 1 1 40%; gap: 8px; }
 
+  /* cartas menores */
+  .cards-area { gap: 8px; padding: 6px; }
   .card {
-    width: 80px;
-    height: 110px;
-    font-size: 0.7rem;
+    width: clamp(76px, 14vw, 110px);
+    height: clamp(105px, 20vw, 150px);
   }
+  .placeholder { font-size: 0.75rem; }
 
-  /* Área de montagem compacta */
+  /* área de montagem: pode quebrar linha e sem min-width rígido */
   .assembly-area {
-    min-height: 25vh;
-    padding: 4px;
-    gap: 4px;
+    min-width: auto !important;
+    min-height: 28vh;
+    padding: 8px;
+    gap: 8px;
+    flex-wrap: wrap !important;
+    justify-content: center;
   }
+  .assembly-hint { font-size: 0.8rem; }
 
-  /* Controles menores */
-  .controls {
-    gap: 4px;
-    font-size: 0.7rem;
-  }
-  #volume-slider {
-    width: 60px;
-  }
+  /* controles compactos */
+  .controls { gap: 8px; }
+  .btn { padding: 8px 10px; font-size: 0.85rem; }
+  .score { font-size: 0.9rem; }
+  #volume-slider { width: 80px; }
 
-  /* Escala geral para caber na tela */
-  body {
-    transform: scale(0.85);
-    transform-origin: top center;
+  /* regras somem p/ ganhar altura */
+  .rules { display: none !important; }
+
+  /* créditos menores e não fixos (evita sobreposição) */
+  .credits {
+    position: static;
+    margin: 6px 10px 10px;
+    font-size: 0.75rem;
   }
+}
+
+/* Ultra-compacto: aparelhos muito baixos em landscape */
+@media (orientation: landscape) and (max-height: 420px) {
+  .card { width: clamp(68px, 12vw, 96px); height: clamp(90px, 17vw, 130px); }
+  .assembly-area { min-height: 24vh; }
+  .btn { padding: 6px 8px; font-size: 0.8rem; }
+  header h1 { font-size: clamp(0.82rem, 3vw, 1rem); }
 }
 
   
@@ -806,6 +824,7 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
+
 
 
 
