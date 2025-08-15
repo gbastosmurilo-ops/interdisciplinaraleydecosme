@@ -719,12 +719,12 @@ function generateDeckAndRender(){
   enableSortables();
 }
 
-let timeLeft = 12;
+let timeLeft = 30;
 let timerInterval;
 
 function startTimer() {
   clearInterval(timerInterval); // evita timers duplicados
-  timeLeft = 12;
+  timeLeft = 30;
   document.getElementById("timer").textContent = `Tempo: ${timeLeft}s`;
 
   timerInterval = setInterval(() => {
@@ -878,6 +878,7 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
+
 
 
 
