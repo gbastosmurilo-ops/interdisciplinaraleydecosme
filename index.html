@@ -763,17 +763,29 @@ function enableSortables(){
   if(sortableAssembly) try{ sortableAssembly.destroy(); }catch(e){}
 
   sortableCards = new Sortable(cardsContainer, {
-    group: 'shared', animation: 180, swapThreshold: 0.6,
-    onStart: ()=> playSound('drag'), onEnd: ()=> {}
+    group: 'shared', 
+    animation: 180, 
+    swapThreshold: 0.6,
+    touchStartForcePreventDefault: false, // melhora arrasto em celulares
+    onStart: ()=> playSound('drag'), 
+    onEnd: ()=> {}
   });
 
   sortableAssembly = new Sortable(dropZone, {
-    group: 'shared', animation: 180, swapThreshold: 0.6,
-    onAdd: ()=> { playSound('drop'); const hint = dropZone.querySelector('.assembly-hint'); if(hint) hint.remove(); },
+    group: 'shared', 
+    animation: 180, 
+    swapThreshold: 0.6,
+    touchStartForcePreventDefault: false, // melhora arrasto em celulares
+    onAdd: ()=> { 
+      playSound('drop'); 
+      const hint = dropZone.querySelector('.assembly-hint'); 
+      if(hint) hint.remove(); 
+    },
     onStart: ()=> playSound('drag'),
     onUpdate: ()=> {}
   });
 }
+
 
 /* Verifica a cadeia: espera 4 cartas e verifica levels na ordem */
 function verifyChain(){
