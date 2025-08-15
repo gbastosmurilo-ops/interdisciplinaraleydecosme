@@ -291,10 +291,99 @@ body {
   }
 }
 
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  header .subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  .left-col, .right-col {
+    flex: 1 1 100%;
+  }
+  .cards-area {
+    gap: 8px;
+  }
+  .card {
+    width: 120px;
+    height: 160px;
+  }
+  .assembly-area {
+    min-width: auto;
+    min-height: 200px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .rules {
+    position: static;
+    width: 100%;
+    margin-top: 12px;
+  }
+  .controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Ajuste extra para telas muito pequenas (celulares compactos) */
+@media (max-width: 480px) {
+  .card {
+    width: 100px;
+    height: 140px;
+  }
+  .assembly-area {
+    min-height: 180px;
+    padding: 10px;
+    gap: 8px;
+  }
+  #volume-slider {
+    width: 80px;
+  }
+}
 
 
 </style>
 </head>
+
+  <style>
+  /* Mensagem de orientação */
+  #rotate-message {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #002b36;
+    color: white;
+    font-size: 1.4rem;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+  }
+</style>
+
+<div id="rotate-message">
+  📱 Por favor, vire seu celular para o modo horizontal para jogar.
+</div>
+
+<script>
+  function checkOrientation() {
+    const isPortrait = window.innerHeight > window.innerWidth;
+    document.getElementById("rotate-message").style.display = isPortrait ? "flex" : "none";
+  }
+  window.addEventListener("resize", checkOrientation);
+  window.addEventListener("orientationchange", checkOrientation);
+  document.addEventListener("DOMContentLoaded", checkOrientation);
+</script>
 
 <body>
 
@@ -664,3 +753,4 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
+
