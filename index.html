@@ -349,6 +349,55 @@ body {
   }
 }
 
+  /* Ajustes para celular no modo horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+  html, body {
+    overflow: hidden; /* Sem rolagem */
+    height: 100vh;
+  }
+
+  header {
+    padding: 4px;
+    gap: 4px;
+  }
+  header h1 {
+    font-size: 1rem; /* título menor */
+  }
+  header .subtitle {
+    font-size: 0.75rem;
+  }
+
+  .cards-area {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .card {
+    width: 90px;  /* cartas menores */
+    height: 120px;
+  }
+
+  .assembly-area {
+    min-height: 30vh; /* área de montagem compacta */
+    padding: 6px;
+    gap: 4px;
+  }
+
+  .rules {
+    font-size: 0.7rem;
+    padding: 6px;
+    width: auto;
+  }
+
+  .controls {
+    gap: 4px;
+  }
+
+  #volume-slider {
+    width: 60px;
+  }
+}
+
 
 </style>
 </head>
@@ -753,4 +802,5 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
+
 
