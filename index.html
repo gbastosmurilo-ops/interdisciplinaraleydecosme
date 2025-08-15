@@ -787,17 +787,23 @@ function enableSortables(){
 }
 
 
-/* Verifica a cadeia: espera 4 cartas e verifica levels na ordem */
+
 function verifyChain(){
   const placed = Array.from(dropZone.querySelectorAll('.card'));
+  
+  // reseta o timer toda vez que verificar
+  startTimer(); 
+
   if(placed.length !== 4){
     showToast('Coloque as 4 cartas na área de montagem!');
     playSound('wrong');
     return;
   }
+
   const expected = ['producer','primary','secondary','tertiary'];
   const levels = placed.map(c => c.dataset.level);
   const ok = levels.join(',') === expected.join(',');
+
   if(ok){
     score++;
     scoreBoard.textContent = `Pontuação: ${score}`;
@@ -807,9 +813,14 @@ function verifyChain(){
     showToast('Cadeia incorreta! Tente novamente.');
     playSound('wrong');
   }
+
   // nova rodada curta após feedback
-  setTimeout(()=> generateDeckAndRender(), 900);
+  setTimeout(() => {
+    generateDeckAndRender();
+    enableSortables();
+  }, 900);
 }
+
 
 /* Controle de efeitos e música */
 effectsToggle.addEventListener('click', ()=>{
@@ -867,6 +878,7 @@ volumeSlider.addEventListener('input', () => {
 </script>
 </body>
 </html>
+
 
 
 
