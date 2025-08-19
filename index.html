@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadeia Alimentar Marinha — Jogo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="rotate-message">
+    📱 Por favor, vire seu celular para o modo horizontal para jogar.
+  </div>
+
+  <div id="timer">Tempo: 30s</div>
+
+  <div class="bubbles" aria-hidden="true">
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <div class="wave-wrapper">
+    <div class="wave">
+    
+      <svg viewBox="0 0 1440 140" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="#0077be" stop-opacity="0.22"/>
+            <stop offset="1" stop-color="#00d1ff" stop-opacity="0.18"/>
+          </linearGradient>
+        </defs>
+        <path
+          d="M0 50 C 320 10, 640 110, 960 60 C 1180 20, 1400 80, 1440 40 L1440 140 L0 140 Z"
+          fill="url(#g1)"
+        />
+      </svg>
+
+      <svg viewBox="0 0 1440 140" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="g2" x1="0" x2="1">
+            <stop offset="0" stop-color="#00d1ff" stop-opacity="0.18"/>
+            <stop offset="1" stop-color="#0077be" stop-opacity="0.22"/>
+          </linearGradient>
+        </defs>
+        <path
+          d="M0 50 C 320 10, 640 110, 960 60 C 1180 20, 1400 80, 1440 40 L1440 140 L0 140 Z"
+          fill="url(#g2)"
+        />
+      </svg>
+    </div>
+  </div>
+
+  <header>
+    <div class="logo-container">
+      <img src="R.png" alt="Logo" class="logo">
+    </div>
+    <div>
+      <h1>Cadeia Alimentar Marinha</h1>
+      <div class="subtitle">Arraste — Reordene — Verifique. Monte a sequência correta.</div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="left-col">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Cartas Disponíveis</h3>
+        <div id="cards-container" class="cards-area" aria-live="polite"></div>
+      </div>
+
+      <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div class="left-controls">
+          <button id="check-btn" class="btn">Verificar Cadeia</button>
+          <button id="new-btn" class="btn alt">Nova Rodada</button>
+          <button id="effects-toggle" class="btn">Efeitos: Off</button>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="score" id="scoreboard">Pontuação: 0</div>
+          <button id="music-toggle" class="btn">Música: Off</button>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" title="Volume">
+        </div>
+      </div>
+    </section>
+
+    <aside class="right-col">
+      <div class="panel">
+        <h3 style="margin:0 0 10px 0">Área de Montagem</h3>
+        <div id="drop-zone" class="assembly-area" tabindex="0" aria-label="Área de montagem">
+          <div class="assembly-hint">Arraste as cartas para cá — reordene livremente</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4 style="margin:0 0 8px 0">Dicas</h4>
+        <p style="margin:0;color:rgba(232,251,255,0.92)">Sequência correta: <strong>Produtor → Consumidor Primário → Consumidor Secundário → Consumidor Terciário</strong>. Cada acerto soma +1 ponto e gera novo conjunto.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div class="credits">Feito por Murilo Gonçalves Bastos e Sergio Otavio Martins Coelho</div>
+
+  <audio id="background-music" loop preload="auto" src="musica.fundo.mp3"></audio>
+  <script src="script.js"></script>
+</body>
+</html>
