@@ -1,4 +1,3 @@
-
 function checkOrientation() {
   const isPortrait = window.innerHeight > window.innerWidth;
   const el = document.getElementById("rotate-message");
@@ -48,15 +47,12 @@ let audioObjects = { drag:null, drop:null, correct:null, wrong:null };
 let audioCtx = null;
 
 function prepareAudio(){
-  
   if(dragSoundUrl)    audioObjects.drag = new Audio(dragSoundUrl);
   if(dropSoundUrl)    audioObjects.drop = new Audio(dropSoundUrl);
   if(correctSoundUrl) audioObjects.correct = new Audio(correctSoundUrl);
   if(wrongSoundUrl)   audioObjects.wrong = new Audio(wrongSoundUrl);
 
- 
   for(let k in audioObjects) if(audioObjects[k]) audioObjects[k].volume = 0.35;
-
 
   if(!audioCtx && !dragSoundUrl){
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ audioCtx = null; }
@@ -66,7 +62,6 @@ function prepareAudio(){
 function playTone(freq=440, time=120, type='sine', gain=0.06){
   if(!effectsOn) return;
   if(audioObjects.drag || audioObjects.drop || audioObjects.correct || audioObjects.wrong){
-
     return;
   }
   if(!audioCtx) return;
@@ -98,7 +93,6 @@ function playSound(name){
     case 'wrong': playTone(220, 220, 'sawtooth', 0.07); break;
   }
 }
-
 
 function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
@@ -133,7 +127,6 @@ function createCardElement(card){
   return el;
 }
 
-
 function generateDeckAndRender(){
   cardsContainer.innerHTML = '';
   dropZone.innerHTML = '<div class="assembly-hint">Arraste as cartas para cá — reordene livremente</div>';
@@ -165,7 +158,6 @@ function startTimer() {
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
 
-   
       const placed = Array.from(dropZone.querySelectorAll('.card'));
       if (placed.length === 4) {
         verifyChain(); 
@@ -174,7 +166,6 @@ function startTimer() {
         playSound('wrong');
       }
 
-      
       setTimeout(() => {
         generateDeckAndRender(); 
         startTimer(); 
@@ -182,10 +173,6 @@ function startTimer() {
     }
   }, 1000);
 }
-
-
-startTimer();
-
 
 let sortableCards, sortableAssembly;
 function enableSortables(){
@@ -218,9 +205,6 @@ function enableSortables(){
 
 function verifyChain(){
   const placed = Array.from(dropZone.querySelectorAll('.card'));
-  
-
-  startTimer(); 
 
   if(placed.length !== 4){
     showToast('Coloque as 4 cartas na área de montagem!');
@@ -242,13 +226,11 @@ function verifyChain(){
     playSound('wrong');
   }
 
-  k
   setTimeout(() => {
     generateDeckAndRender();
-    enableSortables();
+    startTimer(); 
   }, 900);
 }
-
 
 effectsToggle.addEventListener('click', ()=>{
   effectsOn = !effectsOn;
@@ -259,7 +241,6 @@ effectsToggle.addEventListener('click', ()=>{
 
 musicToggle.addEventListener('click', ()=>{
   if(!musicOn){
-   
     music.volume = 0.15;
     music.play().catch(()=> {});
     musicToggle.textContent = 'Música: On';
@@ -271,14 +252,15 @@ musicToggle.addEventListener('click', ()=>{
   }
 });
 
-
 checkBtn.addEventListener('click', verifyChain);
-newBtn.addEventListener('click', generateDeckAndRender);
-
+newBtn.addEventListener('click', () => {
+  generateDeckAndRender();
+  startTimer();
+});
 
 prepareAudio(); 
 generateDeckAndRender();
-
+startTimer(); 
 
 (function makeBubbles(){
   const container = document.querySelector('.bubbles');
@@ -292,7 +274,6 @@ generateDeckAndRender();
     b.style.opacity = `${0.05 + Math.random()*0.25}`; container.appendChild(b);
   }
 })();
-
 
 dropZone.addEventListener('keydown', (e)=> { if(e.key==='Enter') verifyChain(); });
 
