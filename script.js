@@ -184,27 +184,30 @@ function enableSortables(){
   if(sortableAssembly) try{ sortableAssembly.destroy(); }catch(e){}
 
   sortableCards = new Sortable(cardsContainer, {
-    group: 'shared', 
-    animation: 180, 
-    swapThreshold: 0.6,
-    touchStartForcePreventDefault: false, 
-    onStart: ()=> playSound('drag'), 
-    onEnd: ()=> {}
-  });
+  group: 'shared',
+  animation: 180,
+  swapThreshold: 0.6,
+  fallbackOnBody: true,            // força arrasto no body (mobile)
+  ghostClass: 'dragging-card',     // classe aplicada ao clone
+  touchStartForcePreventDefault: true,
+  onStart: ()=> playSound('drag'),
+});
 
-  sortableAssembly = new Sortable(dropZone, {
-    group: 'shared', 
-    animation: 180, 
-    swapThreshold: 0.6,
-    touchStartForcePreventDefault: false, 
-    onAdd: ()=> { 
-      playSound('drop'); 
-      const hint = dropZone.querySelector('.assembly-hint'); 
-      if(hint) hint.remove(); 
-    },
-    onStart: ()=> playSound('drag'),
-    onUpdate: ()=> {}
-  });
+sortableAssembly = new Sortable(dropZone, {
+  group: 'shared',
+  animation: 180,
+  swapThreshold: 0.6,
+  fallbackOnBody: true,
+  ghostClass: 'dragging-card',
+  touchStartForcePreventDefault: true,
+  onAdd: ()=> {
+    playSound('drop');
+    const hint = dropZone.querySelector('.assembly-hint');
+    if(hint) hint.remove();
+  },
+  onStart: ()=> playSound('drag'),
+});
+
 }
 
 function verifyChain(){
