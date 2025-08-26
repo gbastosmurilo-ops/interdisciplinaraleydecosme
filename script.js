@@ -149,11 +149,14 @@ let timerInterval;
 function startTimer() {
   clearInterval(timerInterval); 
   timeLeft = 30;
-  document.getElementById("timer").textContent = `Tempo: ${timeLeft}s`;
+  document.getElementById("timer-desktop").textContent = `Tempo: ${timeLeft}s`;
+  document.getElementById("timer-mobile").textContent = `Tempo: ${timeLeft}s`;
 
   timerInterval = setInterval(() => {
     timeLeft--;
-    document.getElementById("timer").textContent = `Tempo: ${timeLeft}s`;
+
+    document.getElementById("timer-desktop").textContent = `Tempo: ${timeLeft}s`;
+    document.getElementById("timer-mobile").textContent = `Tempo: ${timeLeft}s`;
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
@@ -173,6 +176,7 @@ function startTimer() {
     }
   }, 1000);
 }
+
 
 let sortableCards, sortableAssembly;
 function enableSortables(){

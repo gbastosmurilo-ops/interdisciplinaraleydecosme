@@ -294,9 +294,8 @@ body {
   height: 100%;
 }
 
-.controles {
-  max-width: 700px;
-  gap: 20px;
+.left-controls {
+  flex-direction: row;
 }
 
 @keyframes slide {
@@ -352,6 +351,7 @@ body {
 
 
 @media (max-width: 480px) {
+  
   .card {
     width: 100px;
     height: 140px;
@@ -429,6 +429,13 @@ body {
     margin: 6px 10px 10px;
     font-size: 0.75rem;
   }
+
+  .panel {
+  position: relative; /* necessário para posicionamento absoluto do timer */
+  padding: 16px;      /* espaço interno */
+}
+
+
 }
 
 @media (orientation: landscape) and (max-height: 420px) {
@@ -438,18 +445,20 @@ body {
   header h1 { font-size: clamp(0.82rem, 3vw, 1rem); }
 }
 
-#timer {
-  font-size: 18px;
+.panel {
+  position: relative; /* necessário para que o timer seja posicionado em relação ao painel */
+  padding: 16px;      /* deixa espaço interno para o conteúdo */
+}
+
+#timer-desktop {
+  position: absolute;  /* posiciona dentro do painel */
+  top: 8px;            /* distância do topo do painel */
+  right: 8px;          /* distância da direita do painel */
+  background: rgba(0,0,0,0.2); /* opcional, deixa legível */
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
   font-weight: bold;
-  color: white;
-  background: rgba(0,0,0,0.4);
-  padding: 5px 10px;
-  border-radius: 8px;
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 999;
-  
 }
 
 #rotate-message {
@@ -467,7 +476,72 @@ body {
   align-items: center;
 }
 
-.controles {
-  flex-direction: column ;
+#controles {
+  margin: 20px auto;       /* espaço acima/baixo e centraliza horizontalmente */
+  max-width: 800px;
+  width: 90%;              /* responsivo */
+  display: flex;           /* organiza os botões */
+  justify-content: center; /* centraliza os controles internamente */
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  gap: 8px;                /* espaço entre os botões */
 }
 
+main.container {
+  display: flex;              /* organiza as colunas lado a lado */
+  justify-content: center;    /* centraliza horizontalmente no meio da tela */    /* alinha ao topo (ou center se quiser verticalmente) */
+  gap: 20px;                  /* espaço entre as duas colunas */
+  margin: 0 auto;             /* garante centralização no fluxo normal */
+  padding: 20px 0;            /* espaço acima/baixo */
+  flex-direction: row;    /* permite quebrar em telas pequenas */
+  padding: 0 16px;
+}
+
+@media (min-width: 801px) {  /* só aplica em telas maiores que 800px */
+  main.container {
+    margin-top: 80px; /* empurra para baixo */
+  }
+  #cards-container,
+  #drop-zone {
+  display: flex;            /* ativa flexbox */
+  justify-content: center;  /* centraliza horizontalmente */
+  flex-wrap: wrap;          /* quebra linha se necessário */
+  gap: 12px;                /* espaço entre as cartas */
+}
+}
+
+#dicas {
+  margin: 20px auto;       /* espaço acima/baixo e centraliza horizontalmente */
+  max-width: 70%;
+  width: 90%;              /* responsivo */
+  display: flex;           /* organiza os botões */
+  justify-content: center; /* centraliza os controles internamente */
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  gap: 8px;  
+}
+
+/* Timer mobile: inicialmente escondido */
+#timer-mobile {
+  display: none;
+  text-align: center;
+  margin-bottom: 12px;
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  width: 200px;
+  margin: 0 auto 10px auto;
+}
+
+@media (max-width: 800px) {
+  #timer-desktop {
+    display: none;
+  }
+  #timer-mobile {
+    display: block;
+  }
+}
