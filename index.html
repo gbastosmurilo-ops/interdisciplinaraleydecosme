@@ -74,37 +74,35 @@
         <div id="cards-container" class="cards-area" aria-live="polite"></div>
       </div>
 
-      <div class="panel" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    </section>
+
+    <aside class="right-col">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Área de Montagem</h3>
+        <div id="drop-zone" class="assembly-area" tabindex="0" aria-label="Área de montagem">
+          <div class="assembly-hint">Arraste as cartas para cá — reordene livremente</div>
+        </div>
+      </div>
+        
+      
+    </aside>
+  </main>
+
+    <div class="panel" style="max-width: 700px;">
+      <div class="controles">
         <div class="left-controls">
           <button id="check-btn" class="btn">Verificar Cadeia</button>
           <button id="new-btn" class="btn alt">Nova Rodada</button>
           <button id="effects-toggle" class="btn">Efeitos: Off</button>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center">
           <div class="score" id="scoreboard">Pontuação: 0</div>
           <button id="music-toggle" class="btn">Música: Off</button>
           <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.15" title="Volume">
         </div>
       </div>
-    </section>
-
-    <aside class="right-col">
-      <div class="panel">
-        <h3 style="margin:0 0 10px 0">Área de Montagem</h3>
-        <div id="drop-zone" class="assembly-area" tabindex="0" aria-label="Área de montagem">
-          <div class="assembly-hint">Arraste as cartas para cá — reordene livremente</div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h4 style="margin:0 0 8px 0">Dicas</h4>
-        <p style="margin:0;color:rgba(232,251,255,0.92)">Sequência correta: <strong>Produtor → Consumidor Primário → Consumidor Secundário → Consumidor Terciário</strong>. Cada acerto soma +1 ponto e gera novo conjunto.</p>
-      </div>
-    </aside>
-  </main>
+    </div>    
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <div class="credits">Feito por Murilo Gonçalves Bastos e Sergio Otavio Martins Coelho</div>
+  <div class="credits">Feito por Murilo Gonçalves Bastos </div>
 
   <audio id="background-music" loop preload="auto" src="musica.fundo.mp3"></audio>
   <script src="script.js"></script>

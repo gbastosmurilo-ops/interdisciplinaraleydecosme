@@ -11,21 +11,46 @@ header .subtitle{ color:rgba(234,246,255,0.85); margin-left:100px; font-weight:3
 
 
 main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; display:flex; gap:20px; align-items:flex-start; z-index:3 }
-.left-col{ flex: 0 0 740px; display:flex; flex-direction:column; gap:12px }
-.right-col{ flex:1 1 420px; display:flex; flex-direction:column; gap:12px }
+.left-col{ 
+  flex: 0 0 740px; 
+  display:flex; 
+  flex-direction:column; 
+  gap:12px }
+.right-col{ 
+  min-height: 220px;
+  flex:1 1 720px; display:flex; flex-direction:column; gap:12px;
+  justify-content: stretch;
+}
 
-.panel{ background:var(--panel); border-radius:12px; padding:12px; border:1px solid var(--glass); box-shadow:0 12px 36px rgba(0,0,0,0.45) }
+.panel{ background:var(--panel); border-radius:12px; padding:12px; border:1px solid var(--glass); box-shadow:0 12px 36px rgba(0,0,0,0.45); display: flex; flex-direction: column;}
 
-
-.cards-area{ display:flex; gap:14px; overflow-x:auto; padding:8px; align-items:center }
-.card{ width:170px; height:220px; border-radius:14px; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02)); box-shadow:0 14px 36px rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; cursor:grab; transition:transform .2s, box-shadow .2s; flex-shrink:0 }
+.cards-area{ display:flex; gap:14px; overflow-x:auto; padding:8px; align-items:center;}
+.card{ width:140px; height:20 0px; border-radius:14px; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02)); box-shadow:0 14px 36px rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; cursor:grab; transition:transform .2s, box-shadow .2s; flex-shrink:0 }
 .card:hover{ transform: translateY(-8px) scale(1.03); box-shadow:0 26px 48px rgba(0,0,0,0.55) }
 .card img{ width:100%; height:100%; object-fit:over; display:block }
 .placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; background:linear-gradient(180deg,#dffcff,#bfeffd); color:#012b37; font-weight:700; padding:10px }
 
+.cards-area {
+  height: 220px;   /* altura fixa igual à das cartas */
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
-.assembly-area{ min-height:400px; min-width: 700px; display:flex; gap:14px; align-items:center; padding:18px; border-radius:12px; border:2px dashed rgba(255,255,255,0.06); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.01)); overflow-x:auto; flex-wrap:nowrap }
-.assembly-hint{ color:rgba(232,251,255,0.6); width:100%; text-align:center; padding:12px }
+.assembly-area {
+  height: 220px;   /* mesma altura */
+  min-width: 700px;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 0 18px;   /* remove padding vertical, só lateral */
+  border-radius: 12px;
+  border: 2px dashed rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.01));
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+}
+.assembly-hint{ color:rgba(232,251,255,0.6); width:100%; text-align:center; padding:12px;}
 
 
 .controls{ display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:6px; flex-wrap:wrap }
@@ -48,9 +73,13 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
 @keyframes rise{ 0%{ transform:translateY(0) } 100%{ transform:translateY(-140vh) } }
 
 @media(max-width:980px){
-  main.container{ flex-direction:column; max-width:95vw }
-  .left-col, .right-col{ width:100% }
-  .assembly-area{ min-height:360px; justify-content:center; flex-wrap:wrap }
+  
+  .assembly-area {
+    min-width: auto;
+    min-height: 200px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .bubbles {
@@ -265,6 +294,11 @@ body {
   height: 100%;
 }
 
+.controles {
+  max-width: 700px;
+  gap: 20px;
+}
+
 @keyframes slide {
   from {
     transform: translateX(0);
@@ -299,11 +333,15 @@ body {
     width: 120px;
     height: 160px;
   }
+   .cards-area {
+    height: 180px; /* cartas menores, mesma altura */
+  }
   .assembly-area {
+    height: 180px; /* mesma altura */
     min-width: auto;
-    min-height: 200px;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 0 10px; /* sem padding vertical */
   }
 
   .controls {
@@ -318,9 +356,12 @@ body {
     width: 100px;
     height: 140px;
   }
+  .cards-area {
+    height: 160px;
+  }
   .assembly-area {
-    min-height: 180px;
-    padding: 10px;
+    height: 160px;
+    padding: 0 8px;
     gap: 8px;
   }
   #volume-slider {
@@ -350,25 +391,32 @@ body {
   }
 
   main.container { gap: 12px; margin: 8px 0 18px 0; padding: 8px 10px; }
-  .left-col  { flex: 1 1 60%; gap: 8px; }
-  .right-col { flex: 1 1 40%; gap: 8px; }
+  
+  .left-col, .right-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  }
 
- 
-  .cards-area { gap: 8px; padding: 6px; }
   .card {
     width: clamp(76px, 14vw, 110px);
     height: clamp(105px, 20vw, 150px);
   }
   .placeholder { font-size: 0.75rem; }
 
-  .assembly-area {
-    min-width: auto !important;
-    min-height: 28vh;
-    padding: 8px;
-    gap: 8px;
-    flex-wrap: wrap !important;
-    justify-content: center;
+  .cards-area {
+    height: 140px;
   }
+
+  .assembly-area {
+    height: 140px;
+    min-width: auto !important;
+    padding: 0 6px;
+    gap: 8px;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start;
+  }
+
   .assembly-hint { font-size: 0.8rem; }
 
   .controls { gap: 8px; }
@@ -418,3 +466,8 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.controles {
+  flex-direction: column ;
+}
+
