@@ -196,9 +196,11 @@ sortableCards = new Sortable(cardsContainer, {
   group: 'shared',
   animation: 180,
   swapThreshold: 0.6,
-  fallbackOnBody: true,
-  ghostClass: 'dragging-card',
-  ...(isMobile ? { forceFallback: true } : {}),  // só no mobile
+  fallbackOnBody: true,                 // arrastar no body
+  ghostClass: 'dragging-card',          // classe da carta fantasma
+  fallbackClass: 'dragging-card',       // aplica a carta fantasma no fallback
+  fallbackTolerance: 5,                 // tolerância do arrasto
+  forceFallback: isMobile,              // só no mobile
   onStart: () => playSound('drag'),
 });
 
@@ -208,7 +210,9 @@ sortableAssembly = new Sortable(dropZone, {
   swapThreshold: 0.6,
   fallbackOnBody: true,
   ghostClass: 'dragging-card',
-  ...(isMobile ? { forceFallback: true } : {}),  // só no mobile
+  fallbackClass: 'dragging-card',
+  fallbackTolerance: 5,
+  forceFallback: isMobile,
   onAdd: () => {
     playSound('drop');
     const hint = dropZone.querySelector('.assembly-hint');
@@ -216,6 +220,7 @@ sortableAssembly = new Sortable(dropZone, {
   },
   onStart: () => playSound('drag'),
 });
+
 
 }
 
