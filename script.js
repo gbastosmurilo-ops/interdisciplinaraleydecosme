@@ -108,7 +108,7 @@ function showToast(msg, type = '', timeout = 1700) {
   toast.classList.remove('correct', 'wrong', 'hint');
 
   // Adiciona a classe do tipo (se houver)
-  if(type) toast.classList.add(type);
+  if (type) toast.classList.add(type);
 
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), timeout);
@@ -189,8 +189,8 @@ let sortableCards, sortableAssembly;
 let activeGhost = null; // referência ao clone no mobile
 
 function enableSortables() {
-  if (sortableCards) try { sortableCards.destroy(); } catch (e) {}
-  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) {}
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -208,7 +208,7 @@ function enableSortables() {
       // pega o clone criado pelo fallback
       activeGhost = evt.clone;
       // garante que o fantasma tenha o mesmo tamanho visual da carta original
-      activeGhost.style.width  = evt.item.offsetWidth + 'px';
+      activeGhost.style.width = evt.item.offsetWidth + 'px';
       activeGhost.style.height = evt.item.offsetHeight + 'px';
     },
     onEnd: () => {
@@ -231,108 +231,106 @@ function enableSortables() {
   if (isMobile) {
     // impede scroll enquanto arrasta
     document.addEventListener('touchmove', (e) => {
-      if (activeGhost) e.preventDefault();
-    }, { passive: false });
-
-    document.addEventListener('touchmove', (e) => {
       if (!activeGhost || !e.touches[0]) return;
       const t = e.touches[0];
-      // usa variáveis CSS pra posicionar
+      // centraliza o fantasma no dedo
+      const offsetX = activeGhost.offsetWidth / 2;
+      const offsetY = activeGhost.offsetHeight / 2;
       activeGhost.style.setProperty('--x', t.clientX + 'px');
       activeGhost.style.setProperty('--y', t.clientY + 'px');
-    }, { passive: true });
+    }, { passive: false }); // impede rolagem vertical
   }
 }
 
-function verifyChain() {
-  const placed = Array.from(dropZone.querySelectorAll('.card'));
+  function verifyChain() {
+    const placed = Array.from(dropZone.querySelectorAll('.card'));
 
-  if (placed.length !== 4) {
-  showToast('Coloque as 4 cartas na área de montagem!', 'hint'); // toast azul
-  playSound('wrong');
-  triggerFlash('hint', 300);     // flash azul
-  return;
-}
+    if (placed.length !== 4) {
+      showToast('Coloque as 4 cartas na área de montagem!', 'hint'); // toast azul
+      playSound('wrong');
+      triggerFlash('hint', 300);     // flash azul
+      return;
+    }
 
-  const expected = ['producer', 'primary', 'secondary', 'tertiary'];
-  const levels = placed.map(c => c.dataset.level);
-  const ok = levels.join(',') === expected.join(',');
+    const expected = ['producer', 'primary', 'secondary', 'tertiary'];
+    const levels = placed.map(c => c.dataset.level);
+    const ok = levels.join(',') === expected.join(',');
 
-  if (ok) {
-  score++;
-  scoreBoard.textContent = `Pontuação: ${score}`;
-  showToast('Parabéns! Cadeia correta!', 'correct');   // toast verde
-  playSound('correct');
-  triggerFlash('correct', 300);  // flash verde
-} else {
-  showToast('Cadeia incorreta! Tente novamente.', 'wrong'); // toast vermelho
-  playSound('wrong');
-  triggerFlash('wrong', 300);    // flash vermelho
-}
+    if (ok) {
+      score++;
+      scoreBoard.textContent = `Pontuação: ${score}`;
+      showToast('Parabéns! Cadeia correta!', 'correct');   // toast verde
+      playSound('correct');
+      triggerFlash('correct', 300);  // flash verde
+    } else {
+      showToast('Cadeia incorreta! Tente novamente.', 'wrong'); // toast vermelho
+      playSound('wrong');
+      triggerFlash('wrong', 300);    // flash vermelho
+    }
 
 
-  setTimeout(() => {
+    setTimeout(() => {
+      generateDeckAndRender();
+      startTimer();
+    }, 900);
+  }
+
+  effectsToggle.addEventListener('click', () => {
+    effectsOn = !effectsOn;
+    effectsToggle.textContent = effectsOn ? 'Efeitos: On' : 'Efeitos: Off';
+
+    if (effectsOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  });
+
+  musicToggle.addEventListener('click', () => {
+    if (!musicOn) {
+      music.volume = 0.15;
+      music.play().catch(() => { });
+      musicToggle.textContent = 'Música: On';
+      musicOn = true;
+    } else {
+      music.pause();
+      musicToggle.textContent = 'Música: Off';
+      musicOn = false;
+    }
+  });
+
+  checkBtn.addEventListener('click', verifyChain);
+  newBtn.addEventListener('click', () => {
     generateDeckAndRender();
     startTimer();
-  }, 900);
-}
+  });
 
-effectsToggle.addEventListener('click', () => {
-  effectsOn = !effectsOn;
-  effectsToggle.textContent = effectsOn ? 'Efeitos: On' : 'Efeitos: Off';
-
-  if (effectsOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-});
-
-musicToggle.addEventListener('click', () => {
-  if (!musicOn) {
-    music.volume = 0.15;
-    music.play().catch(() => { });
-    musicToggle.textContent = 'Música: On';
-    musicOn = true;
-  } else {
-    music.pause();
-    musicToggle.textContent = 'Música: Off';
-    musicOn = false;
-  }
-});
-
-checkBtn.addEventListener('click', verifyChain);
-newBtn.addEventListener('click', () => {
+  prepareAudio();
   generateDeckAndRender();
   startTimer();
-});
 
-prepareAudio();
-generateDeckAndRender();
-startTimer();
+  (function makeBubbles() {
+    const container = document.querySelector('.bubbles');
+    if (!container) return;
+    container.innerHTML = '';
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+      const b = document.createElement('div'); b.className = 'bubble';
+      const size = 10 + Math.random() * 70; b.style.width = `${size}px`; b.style.height = `${size}px`;
+      b.style.left = `${Math.random() * 100}%`; b.style.animationDuration = `${12 + Math.random() * 18}s`;
+      b.style.opacity = `${0.05 + Math.random() * 0.25}`; container.appendChild(b);
+    }
+  })();
 
-(function makeBubbles() {
-  const container = document.querySelector('.bubbles');
-  if (!container) return;
-  container.innerHTML = '';
-  const count = 18;
-  for (let i = 0; i < count; i++) {
-    const b = document.createElement('div'); b.className = 'bubble';
-    const size = 10 + Math.random() * 70; b.style.width = `${size}px`; b.style.height = `${size}px`;
-    b.style.left = `${Math.random() * 100}%`; b.style.animationDuration = `${12 + Math.random() * 18}s`;
-    b.style.opacity = `${0.05 + Math.random() * 0.25}`; container.appendChild(b);
+  dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyChain(); });
+
+  const volumeSlider = document.getElementById('volume-slider');
+  volumeSlider.addEventListener('input', () => {
+    music.volume = parseFloat(volumeSlider.value);
+  });
+
+  function triggerFlash(type = 'correct', duration = 300) {
+    const flash = document.getElementById('flash-overlay');
+    flash.className = `flash ${type}`;
+    flash.style.opacity = '1';
+
+    setTimeout(() => {
+      flash.style.opacity = '0';
+    }, duration);
   }
-})();
-
-dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyChain(); });
-
-const volumeSlider = document.getElementById('volume-slider');
-volumeSlider.addEventListener('input', () => {
-  music.volume = parseFloat(volumeSlider.value);
-});
-
-function triggerFlash(type='correct', duration=300){
-  const flash = document.getElementById('flash-overlay');
-  flash.className = `flash ${type}`;
-  flash.style.opacity = '1';
-
-  setTimeout(() => {
-    flash.style.opacity = '0';
-  }, duration);
-}
