@@ -186,65 +186,62 @@ function startTimer() {
 
 
 let sortableCards, sortableAssembly;
+let activeGhost = null; // referência ao clone no mobile
+
 function enableSortables() {
-  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
-  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) {}
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) {}
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-sortableCards = new Sortable(cardsContainer, {
-  group: 'shared',
-  animation: 180,
-  swapThreshold: 0.6,
-  fallbackOnBody: true,                 // arrastar no body
-  ghostClass: 'dragging-card',          // classe da carta fantasma
-  fallbackClass: 'dragging-card',       // aplica a carta fantasma no fallback
-  fallbackTolerance: 5,                 // tolerância do arrasto
-  forceFallback: isMobile,              // só no mobile
-  onStart: () => playSound('drag'),
-});
+  const baseOpts = {
+    group: 'shared',
+    animation: 180,
+    swapThreshold: 0.6,
+    fallbackOnBody: true,         // clone vai para <body>, evita bug de ancestral com transform
+    forceFallback: isMobile,      // só força no mobile
+    ghostClass: 'card-ghost',     // elemento no container enquanto arrasta
+    chosenClass: 'card-chosen',   // item original escolhido
+    fallbackClass: 'card-fallback', // CLONE mobile (o "fantasma" de verdade)
+    onStart: () => playSound('drag'),
+    onClone: (evt) => {
+      // pega o clone criado pelo fallback
+      activeGhost = evt.clone;
+      // garante que o fantasma tenha o mesmo tamanho visual da carta original
+      activeGhost.style.width  = evt.item.offsetWidth + 'px';
+      activeGhost.style.height = evt.item.offsetHeight + 'px';
+    },
+    onEnd: () => {
+      activeGhost = null; // solta referência ao finalizar
+    },
+  };
 
-sortableAssembly = new Sortable(dropZone, {
-  group: 'shared',
-  animation: 180,
-  swapThreshold: 0.6,
-  fallbackOnBody: true,
-  ghostClass: 'dragging-card',
-  fallbackClass: 'dragging-card',
-  fallbackTolerance: 5,
-  forceFallback: isMobile,
-  onAdd: () => {
-    playSound('drop');
-    const hint = dropZone.querySelector('.assembly-hint');
-    if (hint) hint.remove();
-  },
-  onStart: () => playSound('drag'),
-});
+  sortableCards = new Sortable(cardsContainer, baseOpts);
 
-if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-  let activeGhost = null;
-
-  document.addEventListener("touchstart", () => {
-    const ghost = document.querySelector(".dragging-card");
-    if (ghost) {
-      activeGhost = ghost;
+  sortableAssembly = new Sortable(dropZone, {
+    ...baseOpts,
+    onAdd: () => {
+      playSound('drop');
+      const hint = dropZone.querySelector('.assembly-hint');
+      if (hint) hint.remove();
     }
   });
 
-  document.addEventListener("touchmove", (e) => {
-    if (activeGhost && e.touches[0]) {
-      const touch = e.touches[0];
-      activeGhost.style.position = "fixed"; // garante que segue a tela
-      activeGhost.style.left = (touch.clientX - activeGhost.offsetWidth / 2) + "px";
-      activeGhost.style.top  = (touch.clientY - activeGhost.offsetHeight / 2) + "px";
-    }
-  });
+  // Atualiza a posição do fantasma no mobile
+  if (isMobile) {
+    // impede scroll enquanto arrasta
+    document.addEventListener('touchmove', (e) => {
+      if (activeGhost) e.preventDefault();
+    }, { passive: false });
 
-  document.addEventListener("touchend", () => {
-    activeGhost = null;
-  });
-}
-
+    document.addEventListener('touchmove', (e) => {
+      if (!activeGhost || !e.touches[0]) return;
+      const t = e.touches[0];
+      // usa variáveis CSS pra posicionar
+      activeGhost.style.setProperty('--x', t.clientX + 'px');
+      activeGhost.style.setProperty('--y', t.clientY + 'px');
+    }, { passive: true });
+  }
 }
 
 function verifyChain() {

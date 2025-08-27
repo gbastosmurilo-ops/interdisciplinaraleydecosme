@@ -580,31 +580,11 @@ main.container {
 
 @media (min-width: 414px) and (max-width: 896px) {  /* largura típica iPhone Plus/Max */
 
-  .dragging-card {
-    position: fixed !important;
-    width: 120px;   /* ou o tamanho real da carta */
-    height: 160px;
-    transform: scale(1.1);
-    margin: 0 !important;
-    pointer-events: none !important;
-  }
-
-
   .card {
     width: 22%;  /* cada carta ocupa 20% do container */
     height: auto;
   }
 }
-
-.dragging-card {
-  opacity: 0.85;
-  transform: scale(1.05);
-  box-shadow: 0 18px 36px rgba(0,0,0,0.6);
-  z-index: 9999 !important;
-  pointer-events: none;
-}
-
-
 
 .flash {
   position: fixed;
@@ -633,4 +613,32 @@ main.container {
 .toast.hint {
   background: #00bfff;   /* azul */
   color: #fff;
+}
+
+/* Elemento “fantasma” (clone) quando forceFallback = true (apenas mobile) */
+.card-fallback {
+  position: fixed !important;     /* segue a tela */
+  left: var(--x, -9999px);
+  top:  var(--y, -9999px);
+  transform: translate(-50%, -50%) scale(1.06);
+  will-change: transform, left, top;
+  transition: none !important;    /* sem animação CSS que atrapalhe o movimento */
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  box-shadow: 0 18px 36px rgba(0,0,0,0.6);
+}
+
+/* O item “fantasma” dentro da lista (aquele espaço reservado) */
+.card-ghost {
+  opacity: 0.35;
+}
+
+/* O item original escolhido (enquanto arrasta) */
+.card-chosen {
+  opacity: 0.8;
+}
+
+/* Ajuda o touch a ser suave no mobile */
+@media (max-width: 900px) {
+  .card { touch-action: none; }
 }
