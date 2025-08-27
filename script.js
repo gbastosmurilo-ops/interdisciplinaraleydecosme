@@ -210,64 +210,60 @@ function enableSortables() {
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  const baseOpts = {
-    group: 'shared',
-    animation: 180,
-    swapThreshold: 0.6,
-    fallbackOnBody: true,
-    forceFallback: isMobile,
-    ghostClass: 'card-ghost',
-    chosenClass: 'card-chosen',
-    fallbackClass: 'card-fallback',
-    onStart: () => playSound('drag'),
-    onClone: (evt) => {
-      // pega o clone criado pelo fallback
-      activeGhost = evt.clone;
+const body = document.body;
 
-      // garante que o fantasma tenha o mesmo tamanho visual da carta original
-      activeGhost.style.width  = evt.item.offsetWidth + 'px';
-      activeGhost.style.height = evt.item.offsetHeight + 'px';
+const baseOpts = {
+  group: 'shared',
+  animation: 180,
+  swapThreshold: 0.6,
+  fallbackOnBody: true,
+  forceFallback: isMobile,
+  ghostClass: 'card-ghost',
+  chosenClass: 'card-chosen',
+  fallbackClass: 'card-fallback',
+  onStart: () => {
+    playSound('drag');
+    if (isMobile) {
+      // trava scroll da página
+      body.classList.add('no-scroll');
+    }
+  },
+  onClone: (evt) => {
+    activeGhost = evt.clone;
+    activeGhost.style.width = evt.item.offsetWidth + 'px';
+    activeGhost.style.height = evt.item.offsetHeight + 'px';
 
-      // define posição inicial com o último touch (se disponível), para evitar "salto"
-      if (lastTouchPoint) {
-        activeGhost.style.setProperty('--x', lastTouchPoint.clientX + 'px');
-        activeGhost.style.setProperty('--y', lastTouchPoint.clientY + 'px');
-      }
+    if (lastTouchPoint) {
+      activeGhost.style.setProperty('--x', lastTouchPoint.clientX + 'px');
+      activeGhost.style.setProperty('--y', lastTouchPoint.clientY + 'px');
+    }
 
-      // cria e registra um handler touchmove apenas enquanto arrasta
-      _mobileTouchMoveHandler = function (e) {
-        if (!activeGhost || !e.touches || !e.touches[0]) return;
-        const t = e.touches[0];
-        // posiciona o fantasma: CSS translate(-50%,-50%) centraliza automaticamente
-        activeGhost.style.setProperty('--x', t.clientX + 'px');
-        activeGhost.style.setProperty('--y', t.clientY + 'px');
+    // atualiza posição durante arraste
+    _mobileTouchMoveHandler = function (e) {
+      if (!activeGhost || !e.touches || !e.touches[0]) return;
+      const t = e.touches[0];
+      activeGhost.style.setProperty('--x', t.clientX + 'px');
+      activeGhost.style.setProperty('--y', t.clientY + 'px');
+      if (e.cancelable) e.preventDefault(); // impede scroll
+    };
+    document.addEventListener('touchmove', _mobileTouchMoveHandler, { passive: false });
 
-        // evita scroll vertical/panning enquanto arrasta
-        if (e.cancelable) e.preventDefault();
-      };
-
-      // adiciona com passive: false para permitir preventDefault()
-      document.addEventListener('touchmove', _mobileTouchMoveHandler, { passive: false });
-
-      // também registra touchend/touchcancel para garantir limpeza imediata
-      const cleanup = () => {
-        if (_mobileTouchMoveHandler) {
-          document.removeEventListener('touchmove', _mobileTouchMoveHandler);
-          _mobileTouchMoveHandler = null;
-        }
-      };
-      document.addEventListener('touchend', cleanup, { once: true, passive: true });
-      document.addEventListener('touchcancel', cleanup, { once: true, passive: true });
-    },
-    onEnd: () => {
-      // remove handler e referência ao ghost
+    const cleanup = () => {
       if (_mobileTouchMoveHandler) {
-        try { document.removeEventListener('touchmove', _mobileTouchMoveHandler); } catch (e) {}
+        document.removeEventListener('touchmove', _mobileTouchMoveHandler);
         _mobileTouchMoveHandler = null;
       }
-      activeGhost = null;
-    },
-  };
+    };
+    document.addEventListener('touchend', cleanup, { once: true, passive: true });
+    document.addEventListener('touchcancel', cleanup, { once: true, passive: true });
+  },
+  onEnd: () => {
+    activeGhost = null;
+    if (isMobile) {
+      body.classList.remove('no-scroll'); // libera scroll
+    }
+  },
+};
 
   sortableCards = new Sortable(cardsContainer, baseOpts);
 
