@@ -617,12 +617,12 @@ main.container {
 
 /* Elemento “fantasma” (clone) quando forceFallback = true (apenas mobile) */
 .card-fallback {
-  position: fixed !important;     /* segue a tela */
+  position: fixed !important;
   left: var(--x, -9999px);
   top:  var(--y, -9999px);
-  transform: translate(-50%, -50%) scale(1.06);
+  transform: translate(-30%, -20%) scale(1.06); /* puxa mais pra cima */
   will-change: transform, left, top;
-  transition: none !important;    /* sem animação CSS que atrapalhe o movimento */
+  transition: none !important;
   pointer-events: none !important;
   z-index: 9999 !important;
   box-shadow: 0 18px 36px rgba(0,0,0,0.6);
@@ -641,4 +641,5 @@ main.container {
 /* Ajuda o touch a ser suave no mobile */
 @media (max-width: 900px) {
   .card { touch-action: none; }
+
 }
