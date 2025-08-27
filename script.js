@@ -228,18 +228,20 @@ function enableSortables() {
   });
 
   // Atualiza a posição do fantasma no mobile
-  if (isMobile) {
-    // impede scroll enquanto arrasta
-    document.addEventListener('touchmove', (e) => {
-      if (!activeGhost || !e.touches[0]) return;
-      const t = e.touches[0];
-      // centraliza o fantasma no dedo
-      const offsetX = activeGhost.offsetWidth / 2;
-      const offsetY = activeGhost.offsetHeight / 2;
-      activeGhost.style.setProperty('--x', t.clientX + 'px');
-      activeGhost.style.setProperty('--y', t.clientY + 'px');
-    }, { passive: false }); // impede rolagem vertical
-  }
+ if (isMobile) {
+  document.addEventListener('touchmove', (e) => {
+    if (!activeGhost || !e.touches[0]) return;
+
+    const t = e.touches[0];
+
+    // atualiza posição do fantasma
+    activeGhost.style.setProperty('--x', t.clientX + 'px');
+    activeGhost.style.setProperty('--y', t.clientY + 'px');
+
+    // impede rolagem vertical
+    e.preventDefault();
+  }, { passive: false });
+}
 }
 
   function verifyChain() {
