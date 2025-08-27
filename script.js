@@ -184,13 +184,29 @@ function startTimer() {
   }, 1000);
 }
 
+// guarda último ponto de toque (útil porque onClone pode vir logo depois do touchstart)
+let lastTouchPoint = null;
+document.addEventListener('touchstart', (e) => {
+  if (e.touches && e.touches[0]) lastTouchPoint = e.touches[0];
+}, { passive: true });
+
+document.addEventListener('touchend', () => { lastTouchPoint = null; }, { passive: true });
+document.addEventListener('touchcancel', () => { lastTouchPoint = null; }, { passive: true });
 
 let sortableCards, sortableAssembly;
-let activeGhost = null; // referência ao clone no mobile
+let activeGhost = null;
+let _mobileTouchMoveHandler = null; // referência pra remover o listener depois
 
 function enableSortables() {
-  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
-  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
+  // destrói sortables anteriores
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) {}
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) {}
+
+  // garante remover handler anterior caso algo falhou antes
+  if (_mobileTouchMoveHandler) {
+    try { document.removeEventListener('touchmove', _mobileTouchMoveHandler); } catch (e) {}
+    _mobileTouchMoveHandler = null;
+  }
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -198,21 +214,58 @@ function enableSortables() {
     group: 'shared',
     animation: 180,
     swapThreshold: 0.6,
-    fallbackOnBody: true,         // clone vai para <body>, evita bug de ancestral com transform
-    forceFallback: isMobile,      // só força no mobile
-    ghostClass: 'card-ghost',     // elemento no container enquanto arrasta
-    chosenClass: 'card-chosen',   // item original escolhido
-    fallbackClass: 'card-fallback', // CLONE mobile (o "fantasma" de verdade)
+    fallbackOnBody: true,
+    forceFallback: isMobile,
+    ghostClass: 'card-ghost',
+    chosenClass: 'card-chosen',
+    fallbackClass: 'card-fallback',
     onStart: () => playSound('drag'),
     onClone: (evt) => {
       // pega o clone criado pelo fallback
       activeGhost = evt.clone;
+
       // garante que o fantasma tenha o mesmo tamanho visual da carta original
-      activeGhost.style.width = evt.item.offsetWidth + 'px';
+      activeGhost.style.width  = evt.item.offsetWidth + 'px';
       activeGhost.style.height = evt.item.offsetHeight + 'px';
+
+      // define posição inicial com o último touch (se disponível), para evitar "salto"
+      if (lastTouchPoint) {
+        activeGhost.style.setProperty('--x', lastTouchPoint.clientX + 'px');
+        activeGhost.style.setProperty('--y', lastTouchPoint.clientY + 'px');
+      }
+
+      // cria e registra um handler touchmove apenas enquanto arrasta
+      _mobileTouchMoveHandler = function (e) {
+        if (!activeGhost || !e.touches || !e.touches[0]) return;
+        const t = e.touches[0];
+        // posiciona o fantasma: CSS translate(-50%,-50%) centraliza automaticamente
+        activeGhost.style.setProperty('--x', t.clientX + 'px');
+        activeGhost.style.setProperty('--y', t.clientY + 'px');
+
+        // evita scroll vertical/panning enquanto arrasta
+        if (e.cancelable) e.preventDefault();
+      };
+
+      // adiciona com passive: false para permitir preventDefault()
+      document.addEventListener('touchmove', _mobileTouchMoveHandler, { passive: false });
+
+      // também registra touchend/touchcancel para garantir limpeza imediata
+      const cleanup = () => {
+        if (_mobileTouchMoveHandler) {
+          document.removeEventListener('touchmove', _mobileTouchMoveHandler);
+          _mobileTouchMoveHandler = null;
+        }
+      };
+      document.addEventListener('touchend', cleanup, { once: true, passive: true });
+      document.addEventListener('touchcancel', cleanup, { once: true, passive: true });
     },
     onEnd: () => {
-      activeGhost = null; // solta referência ao finalizar
+      // remove handler e referência ao ghost
+      if (_mobileTouchMoveHandler) {
+        try { document.removeEventListener('touchmove', _mobileTouchMoveHandler); } catch (e) {}
+        _mobileTouchMoveHandler = null;
+      }
+      activeGhost = null;
     },
   };
 
@@ -226,23 +279,8 @@ function enableSortables() {
       if (hint) hint.remove();
     }
   });
-
-  // Atualiza a posição do fantasma no mobile
- if (isMobile) {
-  document.addEventListener('touchmove', (e) => {
-    if (!activeGhost || !e.touches[0]) return;
-
-    const t = e.touches[0];
-
-    // atualiza posição do fantasma
-    activeGhost.style.setProperty('--x', t.clientX + 'px');
-    activeGhost.style.setProperty('--y', t.clientY + 'px');
-
-    // impede rolagem vertical
-    e.preventDefault();
-  }, { passive: false });
 }
-}
+
 
   function verifyChain() {
     const placed = Array.from(dropZone.querySelectorAll('.card'));
