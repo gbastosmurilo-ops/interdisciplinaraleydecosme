@@ -187,145 +187,65 @@ function startTimer() {
 
 let sortableCards, sortableAssembly;
 function enableSortables() {
-  if (sortableCards) try { sortableCards.destroy(); } catch (e) {}
-  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) {}
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  // handler helpers para o mobile (posiciona o fantasma)
-  let _touchMoveHandler = null;
-  let _touchEndHandler = null;
+sortableCards = new Sortable(cardsContainer, {
+  group: 'shared',
+  animation: 180,
+  swapThreshold: 0.6,
+  fallbackOnBody: true,                 // arrastar no body
+  ghostClass: 'dragging-card',          // classe da carta fantasma
+  fallbackClass: 'dragging-card',       // aplica a carta fantasma no fallback
+  fallbackTolerance: 5,                 // tolerância do arrasto
+  forceFallback: isMobile,              // só no mobile
+  onStart: () => playSound('drag'),
+});
 
-  function addMobileGhostHandlers() {
-    // remove handlers se já existirem
-    removeMobileGhostHandlers();
+sortableAssembly = new Sortable(dropZone, {
+  group: 'shared',
+  animation: 180,
+  swapThreshold: 0.6,
+  fallbackOnBody: true,
+  ghostClass: 'dragging-card',
+  fallbackClass: 'dragging-card',
+  fallbackTolerance: 5,
+  forceFallback: isMobile,
+  onAdd: () => {
+    playSound('drop');
+    const hint = dropZone.querySelector('.assembly-hint');
+    if (hint) hint.remove();
+  },
+  onStart: () => playSound('drag'),
+});
 
-    _touchMoveHandler = function (ev) {
-      if (!ev.touches || ev.touches.length === 0) return;
-      const t = ev.touches[0];
-      const ghost = document.querySelector('.dragging-card');
-      if (!ghost) return;
-      // centra o fantasma sob o dedo
-      const left = Math.round(t.clientX - (ghost.offsetWidth / 2));
-      const top = Math.round(t.clientY - (ghost.offsetHeight / 2));
-      ghost.style.left = left + 'px';
-      ghost.style.top = top + 'px';
-      // evitar scroll da página enquanto arrasta
-      ev.preventDefault();
-    };
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+  let activeGhost = null;
 
-    _touchEndHandler = function () {
-      removeMobileGhostHandlers();
-    };
-
-    // use passive:false para permitir preventDefault
-    document.addEventListener('touchmove', _touchMoveHandler, { passive: false });
-    document.addEventListener('touchend', _touchEndHandler);
-    document.addEventListener('touchcancel', _touchEndHandler);
-  }
-
-  function removeMobileGhostHandlers() {
-    if (_touchMoveHandler) {
-      document.removeEventListener('touchmove', _touchMoveHandler, { passive: false });
-      _touchMoveHandler = null;
-    }
-    if (_touchEndHandler) {
-      document.removeEventListener('touchend', _touchEndHandler);
-      document.removeEventListener('touchcancel', _touchEndHandler);
-      _touchEndHandler = null;
-    }
-  }
-
-  // Sortable para o container de cartas
-  sortableCards = new Sortable(cardsContainer, {
-    group: 'shared',
-    animation: 180,
-    swapThreshold: 0.6,
-    fallbackOnBody: true,
-    ghostClass: 'dragging-card',
-    fallbackClass: 'dragging-card',
-    fallbackTolerance: 5,
-    forceFallback: isMobile, // apenas mobile
-    onStart: (evt) => {
-      playSound('drag');
-
-      // no mobile: garantimos que o clone/fantasma apareça e siga o dedo
-      if (isMobile) {
-        // ligeiro delay para permitir que o Sortable crie o ghost no DOM
-        requestAnimationFrame(() => {
-          const ghost = document.querySelector('.dragging-card');
-          if (ghost) {
-            // garantir posicionamento inicial sob o ponto de toque
-            // (evt.originalEvent pode ou não existir; tentamos pegar coordenadas)
-            let x = (evt?.originalEvent?.touches?.[0]?.clientX) ?? (evt?.clientX) ?? (window.innerWidth / 2);
-            let y = (evt?.originalEvent?.touches?.[0]?.clientY) ?? (evt?.clientY) ?? (window.innerHeight / 2);
-            ghost.style.left = (x - (ghost.offsetWidth / 2)) + 'px';
-            ghost.style.top = (y - (ghost.offsetHeight / 2)) + 'px';
-            ghost.classList.add('mobile-boost');
-          }
-        });
-
-        // bloqueia rolagem do body enquanto arrasta (opcional)
-        document.body.style.touchAction = 'none';
-        addMobileGhostHandlers();
-      }
-    },
-    onEnd: (evt) => {
-      // cleanup mobile handlers e restaurar touch-action
-      if (isMobile) {
-        removeMobileGhostHandlers();
-        document.body.style.touchAction = '';
-        // remover boost visual
-        const ghost = document.querySelector('.dragging-card');
-        if (ghost) ghost.classList.remove('mobile-boost');
-      }
+  document.addEventListener("touchstart", () => {
+    const ghost = document.querySelector(".dragging-card");
+    if (ghost) {
+      activeGhost = ghost;
     }
   });
 
-  // Sortable para a área de montagem
-  sortableAssembly = new Sortable(dropZone, {
-    group: 'shared',
-    animation: 180,
-    swapThreshold: 0.6,
-    fallbackOnBody: true,
-    ghostClass: 'dragging-card',
-    fallbackClass: 'dragging-card',
-    fallbackTolerance: 5,
-    forceFallback: isMobile,
-    onAdd: () => {
-      playSound('drop');
-      const hint = dropZone.querySelector('.assembly-hint');
-      if (hint) hint.remove();
-    },
-    onStart: (evt) => {
-      playSound('drag');
-      if (isMobile) {
-        requestAnimationFrame(() => {
-          const ghost = document.querySelector('.dragging-card');
-          if (ghost) {
-            let x = (evt?.originalEvent?.touches?.[0]?.clientX) ?? (evt?.clientX) ?? (window.innerWidth / 2);
-            let y = (evt?.originalEvent?.touches?.[0]?.clientY) ?? (evt?.clientY) ?? (window.innerHeight / 2);
-            ghost.style.left = (x - (ghost.offsetWidth / 2)) + 'px';
-            ghost.style.top = (y - (ghost.offsetHeight / 2)) + 'px';
-            ghost.classList.add('mobile-boost');
-          }
-        });
-        document.body.style.touchAction = 'none';
-        addMobileGhostHandlers();
-      }
-    },
-    onEnd: (evt) => {
-      if (isMobile) {
-        removeMobileGhostHandlers();
-        document.body.style.touchAction = '';
-        const ghost = document.querySelector('.dragging-card');
-        if (ghost) ghost.classList.remove('mobile-boost');
-      }
+  document.addEventListener("touchmove", (e) => {
+    if (activeGhost && e.touches[0]) {
+      const touch = e.touches[0];
+      activeGhost.style.position = "fixed"; // garante que segue a tela
+      activeGhost.style.left = (touch.clientX - activeGhost.offsetWidth / 2) + "px";
+      activeGhost.style.top  = (touch.clientY - activeGhost.offsetHeight / 2) + "px";
     }
+  });
+
+  document.addEventListener("touchend", () => {
+    activeGhost = null;
   });
 }
 
-
+}
 
 function verifyChain() {
   const placed = Array.from(dropZone.querySelectorAll('.card'));
