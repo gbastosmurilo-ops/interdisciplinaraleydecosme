@@ -49,7 +49,7 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
 .panel{ background:var(--panel); border-radius:12px; padding:12px; border:1px solid var(--glass); box-shadow:0 12px 36px rgba(0,0,0,0.45); display: flex; flex-direction: column;}
 
 .cards-area{ display:flex; gap:14px; overflow-x:auto; padding:8px; align-items:center;}
-.card{ width:140px; height:200px; border-radius:14px; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02)); box-shadow:0 14px 36px rgba(0,0,0,0.45); display:flex; align-items:center; justify-content:center; cursor:grab; transition:transform .2s, box-shadow .2s; flex-shrink:0 }
+.card{ width:140px; height:200px; border-radius:14px; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02)); display:flex; align-items:center; justify-content:center; cursor:grab; transition:transform .2s, box-shadow .2s; flex-shrink:0 }
 .card:hover{ transform: translateY(-8px) scale(1.03); box-shadow:0 26px 48px rgba(0,0,0,0.55) }
 .card img{ width:100%; height:100%; object-fit:over; display:block }
 .placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; background:linear-gradient(180deg,#dffcff,#bfeffd); color:#012b37; font-weight:700; padding:10px }
@@ -89,7 +89,19 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
 .toast.show{ opacity:1 }
 
 
-.credits{ position:fixed; right:12px; bottom:8px; font-size:0.85rem; color:rgba(255,255,255,0.9); background: rgba(0,0,0,0.16); padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); z-index:8 }
+.credits {
+  position: relative;       /* não fixa mais na tela */
+  margin: 20px auto 10px auto; /* distância do topo e do final, centralizado */
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.9);
+  background: rgba(0,0,0,0.16);
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.03);
+  text-align: center;
+  max-width: 300px;         /* opcional, limita a largura */
+  bottom: -6%;
+}
 
 
 .bubbles{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
@@ -449,12 +461,6 @@ body {
   .score { font-size: 0.9rem; }
   #volume-slider { width: 80px; }
 
-  .credits {
-    position: static;
-    margin: 6px 10px 10px;
-    font-size: 0.75rem;
-  }
-
   .panel {
   position: relative; /* necessário para posicionamento absoluto do timer */
   padding: 16px;      /* espaço interno */
@@ -591,4 +597,33 @@ main.container {
   .dragging-card {
     transform: scale(1.15);
   }
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flash.correct { background: rgba(0, 255, 100, 0.25); }   /* verde claro */
+.flash.wrong   { background: rgba(255, 0, 0, 0.25); }     /* vermelho */
+.flash.hint    { background: rgba(0, 150, 255, 0.25); }   /* azul para aviso */
+
+
+.toast.correct {
+  background: #00ff66;   /* verde */
+  color: #012b37;         /* letra escura */
+}
+
+.toast.wrong {
+  background: #ff4c4c;   /* vermelho */
+  color: #fff;            /* letra clara */
+}
+
+.toast.hint {
+  background: #00bfff;   /* azul */
+  color: #fff;
 }

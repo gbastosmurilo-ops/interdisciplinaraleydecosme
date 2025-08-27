@@ -9,21 +9,21 @@ document.addEventListener("DOMContentLoaded", checkOrientation);
 
 
 const allCards = [
-  { name:"Fitoplâncton", level:"producer", img:"assets/cards/producers_fitoplancton.png" },
-  { name:"Algas verdes", level:"producer", img:"assets/cards/producers_algas_verdes.png" },
-  { name:"Algas vermelhas", level:"producer", img:"assets/cards/producers_algas_vermelhas.png" },
+  { name: "Fitoplâncton", level: "producer", img: "assets/cards/producers_fitoplancton.png" },
+  { name: "Algas verdes", level: "producer", img: "assets/cards/producers_algas_verdes.png" },
+  { name: "Algas vermelhas", level: "producer", img: "assets/cards/producers_algas_vermelhas.png" },
 
-  { name:"Zooplâncton", level:"primary", img:"assets/cards/primary_zooplancton.png" },
-  { name:"Peixe pequeno", level:"primary", img:"assets/cards/primary_peixe_pequeno.png" },
-  { name:"Cavalo-marinho", level:"primary", img:"assets/cards/primary_cavalo_marinho.png" },
+  { name: "Zooplâncton", level: "primary", img: "assets/cards/primary_zooplancton.png" },
+  { name: "Peixe pequeno", level: "primary", img: "assets/cards/primary_peixe_pequeno.png" },
+  { name: "Cavalo-marinho", level: "primary", img: "assets/cards/primary_cavalo_marinho.png" },
 
-  { name:"Água-viva", level:"secondary", img:"assets/cards/secondary_agua_viva.png" },
-  { name:"Lula", level:"secondary", img:"assets/cards/secondary_lula.png" },
-  { name:"Peixe carnívoro", level:"secondary", img:"assets/cards/secondary_peixe_carnivoro.png" },
+  { name: "Água-viva", level: "secondary", img: "assets/cards/secondary_agua_viva.png" },
+  { name: "Lula", level: "secondary", img: "assets/cards/secondary_lula.png" },
+  { name: "Peixe carnívoro", level: "secondary", img: "assets/cards/secondary_peixe_carnivoro.png" },
 
-  { name:"Tubarão", level:"tertiary", img:"assets/cards/tertiary_tubarao.png" },
-  { name:"Orca", level:"tertiary", img:"assets/cards/tertiary_orca.png" },
-  { name:"Foca", level:"tertiary", img:"assets/cards/tertiary_foca.png" }
+  { name: "Tubarão", level: "tertiary", img: "assets/cards/tertiary_tubarao.png" },
+  { name: "Orca", level: "tertiary", img: "assets/cards/tertiary_orca.png" },
+  { name: "Foca", level: "tertiary", img: "assets/cards/tertiary_foca.png" }
 ];
 
 
@@ -43,28 +43,28 @@ let effectsOn = false;
 let musicOn = false;
 
 
-let audioObjects = { drag:null, drop:null, correct:null, wrong:null };
+let audioObjects = { drag: null, drop: null, correct: null, wrong: null };
 let audioCtx = null;
 
-function prepareAudio(){
-  if(dragSoundUrl)    audioObjects.drag = new Audio(dragSoundUrl);
-  if(dropSoundUrl)    audioObjects.drop = new Audio(dropSoundUrl);
-  if(correctSoundUrl) audioObjects.correct = new Audio(correctSoundUrl);
-  if(wrongSoundUrl)   audioObjects.wrong = new Audio(wrongSoundUrl);
+function prepareAudio() {
+  if (dragSoundUrl) audioObjects.drag = new Audio(dragSoundUrl);
+  if (dropSoundUrl) audioObjects.drop = new Audio(dropSoundUrl);
+  if (correctSoundUrl) audioObjects.correct = new Audio(correctSoundUrl);
+  if (wrongSoundUrl) audioObjects.wrong = new Audio(wrongSoundUrl);
 
-  for(let k in audioObjects) if(audioObjects[k]) audioObjects[k].volume = 0.35;
+  for (let k in audioObjects) if (audioObjects[k]) audioObjects[k].volume = 0.35;
 
-  if(!audioCtx && !dragSoundUrl){
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ audioCtx = null; }
+  if (!audioCtx && !dragSoundUrl) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
   }
 }
 
-function playTone(freq=440, time=120, type='sine', gain=0.06){
-  if(!effectsOn) return;
-  if(audioObjects.drag || audioObjects.drop || audioObjects.correct || audioObjects.wrong){
+function playTone(freq = 440, time = 120, type = 'sine', gain = 0.06) {
+  if (!effectsOn) return;
+  if (audioObjects.drag || audioObjects.drop || audioObjects.correct || audioObjects.wrong) {
     return;
   }
-  if(!audioCtx) return;
+  if (!audioCtx) return;
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
   o.type = type; o.frequency.value = freq;
@@ -73,41 +73,48 @@ function playTone(freq=440, time=120, type='sine', gain=0.06){
   o.start();
   const now = audioCtx.currentTime;
   g.gain.setValueAtTime(g.gain.value, now);
-  g.gain.exponentialRampToValueAtTime(0.001, now + time/1000);
-  o.stop(now + time/1000 + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.001, now + time / 1000);
+  o.stop(now + time / 1000 + 0.02);
 }
 
-function playSound(name){
-  if(!effectsOn) return;
-  
-  if(audioObjects[name]){
+function playSound(name) {
+  if (!effectsOn) return;
+
+  if (audioObjects[name]) {
     audioObjects[name].currentTime = 0;
-    audioObjects[name].play().catch(()=>{}); 
+    audioObjects[name].play().catch(() => { });
     return;
   }
- 
-  switch(name){
+
+  switch (name) {
     case 'drag': playTone(420, 80, 'sine', 0.03); break;
     case 'drop': playTone(520, 80, 'triangle', 0.03); break;
-    case 'correct': playTone(720, 220, 'sine', 0.08); setTimeout(()=> playTone(920, 140, 'sine', 0.06), 140); break;
+    case 'correct': playTone(720, 220, 'sine', 0.08); setTimeout(() => playTone(920, 140, 'sine', 0.06), 140); break;
     case 'wrong': playTone(220, 220, 'sawtooth', 0.07); break;
   }
 }
 
-function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-function shuffle(a){
-  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1));[a[i], a[j]] = [a[j], a[i]]; }
   return a;
 }
 
-function showToast(msg, timeout=1700){
+function showToast(msg, type = '', timeout = 1700) {
   toast.textContent = msg;
+
+  // Remove classes anteriores
+  toast.classList.remove('correct', 'wrong', 'hint');
+
+  // Adiciona a classe do tipo (se houver)
+  if(type) toast.classList.add(type);
+
   toast.classList.add('show');
-  setTimeout(()=> toast.classList.remove('show'), timeout);
+  setTimeout(() => toast.classList.remove('show'), timeout);
 }
 
-function createCardElement(card){
+function createCardElement(card) {
   const el = document.createElement('div');
   el.className = 'card';
   el.tabIndex = 0;
@@ -127,7 +134,7 @@ function createCardElement(card){
   return el;
 }
 
-function generateDeckAndRender(){
+function generateDeckAndRender() {
   cardsContainer.innerHTML = '';
   dropZone.innerHTML = '<div class="assembly-hint">Arraste as cartas para cá — reordene livremente</div>';
   const producers = allCards.filter(c => c.level === 'producer');
@@ -135,8 +142,8 @@ function generateDeckAndRender(){
   const secondaries = allCards.filter(c => c.level === 'secondary');
   const tertiaries = allCards.filter(c => c.level === 'tertiary');
 
-  let selected = [ pickRandom(producers), pickRandom(primaries), pickRandom(secondaries), pickRandom(tertiaries) ];
-  do { selected = shuffle(selected); } while(selected[0].level==='producer' && selected[1].level==='primary' && selected[2].level==='secondary' && selected[3].level==='tertiary');
+  let selected = [pickRandom(producers), pickRandom(primaries), pickRandom(secondaries), pickRandom(tertiaries)];
+  do { selected = shuffle(selected); } while (selected[0].level === 'producer' && selected[1].level === 'primary' && selected[2].level === 'secondary' && selected[3].level === 'tertiary');
 
   selected.forEach(c => cardsContainer.appendChild(createCardElement(c)));
 
@@ -147,7 +154,7 @@ let timeLeft = 30;
 let timerInterval;
 
 function startTimer() {
-  clearInterval(timerInterval); 
+  clearInterval(timerInterval);
   timeLeft = 30;
   document.getElementById("timer-desktop").textContent = `Tempo: ${timeLeft}s`;
   document.getElementById("timer-mobile").textContent = `Tempo: ${timeLeft}s`;
@@ -163,15 +170,15 @@ function startTimer() {
 
       const placed = Array.from(dropZone.querySelectorAll('.card'));
       if (placed.length === 4) {
-        verifyChain(); 
+        verifyChain();
       } else {
         showToast('Tempo esgotado! Coloque 4 cartas para verificar.');
         playSound('wrong');
       }
 
       setTimeout(() => {
-        generateDeckAndRender(); 
-        startTimer(); 
+        generateDeckAndRender();
+        startTimer();
       }, 1000);
     }
   }, 1000);
@@ -179,18 +186,20 @@ function startTimer() {
 
 
 let sortableCards, sortableAssembly;
-function enableSortables(){
-  if(sortableCards) try{ sortableCards.destroy(); }catch(e){}
-  if(sortableAssembly) try{ sortableAssembly.destroy(); }catch(e){}
+function enableSortables() {
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
 
-  sortableCards = new Sortable(cardsContainer, {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+sortableCards = new Sortable(cardsContainer, {
   group: 'shared',
   animation: 180,
   swapThreshold: 0.6,
-  fallbackOnBody: true,            // força arrasto no body (mobile)
-  ghostClass: 'dragging-card',     // classe aplicada ao clone
-  touchStartForcePreventDefault: true,
-  onStart: ()=> playSound('drag'),
+  fallbackOnBody: true,
+  ghostClass: 'dragging-card',
+  ...(isMobile ? { forceFallback: true } : {}),  // só no mobile
+  onStart: () => playSound('drag'),
 });
 
 sortableAssembly = new Sortable(dropZone, {
@@ -199,57 +208,61 @@ sortableAssembly = new Sortable(dropZone, {
   swapThreshold: 0.6,
   fallbackOnBody: true,
   ghostClass: 'dragging-card',
-  touchStartForcePreventDefault: true,
-  onAdd: ()=> {
+  ...(isMobile ? { forceFallback: true } : {}),  // só no mobile
+  onAdd: () => {
     playSound('drop');
     const hint = dropZone.querySelector('.assembly-hint');
-    if(hint) hint.remove();
+    if (hint) hint.remove();
   },
-  onStart: ()=> playSound('drag'),
+  onStart: () => playSound('drag'),
 });
 
 }
 
-function verifyChain(){
+function verifyChain() {
   const placed = Array.from(dropZone.querySelectorAll('.card'));
 
-  if(placed.length !== 4){
-    showToast('Coloque as 4 cartas na área de montagem!');
-    playSound('wrong');
-    return;
-  }
+  if (placed.length !== 4) {
+  showToast('Coloque as 4 cartas na área de montagem!', 'hint'); // toast azul
+  playSound('wrong');
+  triggerFlash('hint', 300);     // flash azul
+  return;
+}
 
-  const expected = ['producer','primary','secondary','tertiary'];
+  const expected = ['producer', 'primary', 'secondary', 'tertiary'];
   const levels = placed.map(c => c.dataset.level);
   const ok = levels.join(',') === expected.join(',');
 
-  if(ok){
-    score++;
-    scoreBoard.textContent = `Pontuação: ${score}`;
-    showToast('Parabéns! Cadeia correta!');
-    playSound('correct');
-  } else {
-    showToast('Cadeia incorreta! Tente novamente.');
-    playSound('wrong');
-  }
+  if (ok) {
+  score++;
+  scoreBoard.textContent = `Pontuação: ${score}`;
+  showToast('Parabéns! Cadeia correta!', 'correct');   // toast verde
+  playSound('correct');
+  triggerFlash('correct', 300);  // flash verde
+} else {
+  showToast('Cadeia incorreta! Tente novamente.', 'wrong'); // toast vermelho
+  playSound('wrong');
+  triggerFlash('wrong', 300);    // flash vermelho
+}
+
 
   setTimeout(() => {
     generateDeckAndRender();
-    startTimer(); 
+    startTimer();
   }, 900);
 }
 
-effectsToggle.addEventListener('click', ()=>{
+effectsToggle.addEventListener('click', () => {
   effectsOn = !effectsOn;
   effectsToggle.textContent = effectsOn ? 'Efeitos: On' : 'Efeitos: Off';
 
-  if(effectsOn && audioCtx && audioCtx.state==='suspended') audioCtx.resume();
+  if (effectsOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 });
 
-musicToggle.addEventListener('click', ()=>{
-  if(!musicOn){
+musicToggle.addEventListener('click', () => {
+  if (!musicOn) {
     music.volume = 0.15;
-    music.play().catch(()=> {});
+    music.play().catch(() => { });
     musicToggle.textContent = 'Música: On';
     musicOn = true;
   } else {
@@ -265,26 +278,36 @@ newBtn.addEventListener('click', () => {
   startTimer();
 });
 
-prepareAudio(); 
+prepareAudio();
 generateDeckAndRender();
-startTimer(); 
+startTimer();
 
-(function makeBubbles(){
+(function makeBubbles() {
   const container = document.querySelector('.bubbles');
-  if(!container) return;
+  if (!container) return;
   container.innerHTML = '';
   const count = 18;
-  for(let i=0;i<count;i++){
-    const b = document.createElement('div'); b.className='bubble';
-    const size = 10 + Math.random()*70; b.style.width = `${size}px`; b.style.height = `${size}px`;
-    b.style.left = `${Math.random()*100}%`; b.style.animationDuration = `${12 + Math.random()*18}s`;
-    b.style.opacity = `${0.05 + Math.random()*0.25}`; container.appendChild(b);
+  for (let i = 0; i < count; i++) {
+    const b = document.createElement('div'); b.className = 'bubble';
+    const size = 10 + Math.random() * 70; b.style.width = `${size}px`; b.style.height = `${size}px`;
+    b.style.left = `${Math.random() * 100}%`; b.style.animationDuration = `${12 + Math.random() * 18}s`;
+    b.style.opacity = `${0.05 + Math.random() * 0.25}`; container.appendChild(b);
   }
 })();
 
-dropZone.addEventListener('keydown', (e)=> { if(e.key==='Enter') verifyChain(); });
+dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyChain(); });
 
 const volumeSlider = document.getElementById('volume-slider');
 volumeSlider.addEventListener('input', () => {
   music.volume = parseFloat(volumeSlider.value);
 });
+
+function triggerFlash(type='correct', duration=300){
+  const flash = document.getElementById('flash-overlay');
+  flash.className = `flash ${type}`;
+  flash.style.opacity = '1';
+
+  setTimeout(() => {
+    flash.style.opacity = '0';
+  }, duration);
+}
