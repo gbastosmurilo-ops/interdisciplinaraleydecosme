@@ -3,7 +3,19 @@
   --panel: rgba(255,255,255,0.04); --glass: rgba(43, 20, 20, 0.06);
 }
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:"Poppins",system-ui,sans-serif;background:linear-gradient(180deg,var(--ocean1),var(--ocean2));color:#eaf6ff;-webkit-font-smoothing:antialiased}
+
+html, body {
+  min-height: 100vh;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--ocean1), var(--ocean2));
+  color: #eaf6ff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* evita cortes laterais */
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -35,6 +47,8 @@ header .subtitle {
 
 
 main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; display:flex; gap:20px; align-items:flex-start; z-index:3 }
+
+
 .left-col{ 
   flex: 0 0 740px; 
   display:flex; 
@@ -238,14 +252,17 @@ body {
   pointer-events: none;
   overflow: hidden;
 }
+
 .ocean {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 120px;
+  height: 18vh; /* relativo ao tamanho da tela */
   pointer-events: none;
   overflow: hidden;
+  z-index: 1;
+  user-select: none;
 }
 .ocean {
   position: fixed;
@@ -311,8 +328,8 @@ body {
 .wave-wrapper {
   transform: scaleY(-1);
   position: relative;
-  width: 100%;  
-  height: 120px;       
+  width: 100%;
+  height: 12vh; /* relativo à tela */
   overflow: hidden;
 }
 
@@ -325,9 +342,8 @@ body {
 }
 
 .wave svg {
-  flex-shrink: 0;
-  width: 50%;          
   height: 100%;
+  width: 50%;
 }
 
 .left-controls {
@@ -649,4 +665,73 @@ main.container {
   overflow: hidden;
   touch-action: none;
   height: 100%;
+}
+
+@media (min-width: 1000px) and (max-width: 1400px) and (max-height: 900px) {
+  .ocean {
+    height: 15vh;
+  }
+  .wave-wrapper {
+    height: 10vh;
+  }
+  main.container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+/* --- FIX tablet: manter lado a lado, sem cortar e sem empilhar --- */
+
+/* iPad e tablets médios (retrato/paisagem) */
+@media (min-width: 768px) and (max-width: 1200px) {
+  main.container { gap: 12px !important; padding: 12px 10px !important; flex-wrap: nowrap !important; }
+
+  /* usar porcentagem para caber lado a lado */
+  .left-col, .right-col { 
+    flex: 0 0 50% !important; 
+    max-width: 50% !important; 
+  }
+
+  /* permitir encolher dentro da coluna */
+  .assembly-area { 
+    min-width: 0 !important; 
+    width: 100% !important; 
+    height: 180px !important; 
+  }
+
+  .cards-area { height: 180px !important; }
+
+  /* cartas um pouco menores para caber no mesmo plano */
+  .card { 
+    height: 95%;
+    width: 20%;  /* cada carta ocupa 20% do container */
+  }
+
+  .logo-container { position: static; width: px; }
+  
+}
+
+/* tablets grandes (ex.: 1024–1366 de largura, ex. iPad Air/Pro e 1280x800) */
+@media (min-width: 1201px) and (max-width: 1366px) {
+  main.container { gap: 14px !important; flex-wrap: nowrap !important; }
+
+  .left-col, .right-col { 
+    flex: 0 0 50% !important; 
+    max-width: 50% !important; 
+  }
+
+  .assembly-area { 
+    min-width: 0 !important; 
+    width: 100% !important; 
+    height: 190px !important; 
+  }
+
+  .cards-area { height: 190px !important; }
+
+  .card { 
+    height: 95%;
+    width: 20%;  /* cada carta ocupa 20% do container */
+  }
+  
+  .logo-container { position: static; width: px; }
 }
