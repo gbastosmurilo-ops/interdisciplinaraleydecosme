@@ -703,7 +703,7 @@ main.container {
 
   /* cartas um pouco menores para caber no mesmo plano */
   .card { 
-    height: 95%;
+    height: auto;
     width: 20%;  /* cada carta ocupa 20% do container */
   }
 
@@ -729,7 +729,7 @@ main.container {
   .cards-area { height: 190px !important; }
 
   .card { 
-    height: 95%;
+    height: auto;
     width: 20%;  /* cada carta ocupa 20% do container */
   }
   
