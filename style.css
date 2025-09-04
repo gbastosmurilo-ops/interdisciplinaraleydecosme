@@ -1,10 +1,17 @@
-:root{
-  --ocean1:#02283a; --ocean2:#0077be; --accent:#00d1ff;
-  --panel: rgba(255,255,255,0.04); --glass: rgba(43, 20, 20, 0.06);
+:root {
+  --ocean1: #02283a;
+  --ocean2: #0077be;
+  --accent: #00d1ff;
+  --panel: rgba(255, 255, 255, 0.04);
+  --glass: rgba(43, 20, 20, 0.06);
 }
-*{box-sizing:border-box}
 
-html, body {
+* {
+  box-sizing: border-box
+}
+
+html,
+body {
   min-height: 100vh;
   height: auto;
   margin: 0;
@@ -13,117 +20,278 @@ html, body {
   background: linear-gradient(180deg, var(--ocean1), var(--ocean2));
   color: #eaf6ff;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden; /* evita cortes laterais */
+  overflow-x: hidden;
+  /* evita cortes laterais */
 }
 
 header {
   display: flex;
   flex-direction: column;
-  align-items: center;   /* centraliza HORIZONTALMENTE */
-  justify-content: center; /* centraliza VERTICALMENTE (se precisar) */
-  gap: 8px;  /* espaçamento entre logo, título e subtítulo */
+  align-items: center;
+  /* centraliza HORIZONTALMENTE */
+  justify-content: center;
+  /* centraliza VERTICALMENTE (se precisar) */
+  gap: 8px;
+  /* espaçamento entre logo, título e subtítulo */
   padding: 18px 28px;
   z-index: 3;
 }
-.logo{ width:56px;height:56px;border-radius:12px;background:radial-gradient(circle at 30% 20%, #7af0ff,#0077be); display:flex;align-items:center;justify-content:center; font-weight:800; ; color:#012b37;}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 30% 20%, #7af0ff, #0077be);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  ;
+  color: #012b37;
+}
 
 header img.logo {
-  max-width: 120px; /* opcional: controla o tamanho da logo */
+  max-width: 120px;
+  /* opcional: controla o tamanho da logo */
   height: auto;
 }
 
-header h1 { 
-  margin: 0; 
-  font-size: 1.6rem; 
-  text-shadow: 0 6px 18px rgba(0,0,0,0.35);
+header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   text-align: center;
 }
-header .subtitle { 
-  color: rgba(234,246,255,0.85); 
-  margin: 6px 0 0 0; 
+
+header .subtitle {
+  color: rgba(234, 246, 255, 0.85);
+  margin: 6px 0 0 0;
   font-weight: 300;
   text-align: center;
 }
 
 
-main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; display:flex; gap:20px; align-items:flex-start; z-index:3 }
+main.container {
+  max-width: 1200px;
+  margin: 18px 0 64px 0;
+  padding: 12px 22px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  z-index: 3
+}
 
 
-.left-col{ 
-  flex: 0 0 740px; 
-  display:flex; 
-  flex-direction:column; 
-  gap:12px }
-.right-col{ 
+.left-col {
+  flex: 0 0 740px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px
+}
+
+.right-col {
   min-height: 220px;
-  flex:1 1 720px; display:flex; flex-direction:column; gap:12px;
+  flex: 1 1 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   justify-content: stretch;
 }
 
-.panel{ background:var(--panel); border-radius:12px; padding:12px; border:1px solid var(--glass); box-shadow:0 12px 36px rgba(0,0,0,0.45); display: flex; flex-direction: column;}
-
-.cards-area{ display:flex; gap:14px; overflow-x:auto; padding:8px; align-items:center;}
-.card{ width:140px; height:200px; border-radius:14px; overflow:hidden; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02)); display:flex; align-items:center; justify-content:center; cursor:grab; transition:transform .2s, box-shadow .2s; flex-shrink:0 }
-.card:hover{ transform: translateY(-8px) scale(1.03); box-shadow:0 26px 48px rgba(0,0,0,0.55) }
-.card img{ width:100%; height:100%; object-fit:over; display:block }
-.placeholder{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; text-align:center; background:linear-gradient(180deg,#dffcff,#bfeffd); color:#012b37; font-weight:700; padding:10px }
+.panel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--glass);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+}
 
 .cards-area {
-  height: 220px;   /* altura fixa igual à das cartas */
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding: 8px;
+  align-items: center;
+}
+
+.card {
+  width: 140px;
+  height: 200px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: transform .2s, box-shadow .2s;
+  flex-shrink: 0
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 26px 48px rgba(0, 0, 0, 0.55)
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: over;
+  display: block
+}
+
+.placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(180deg, #dffcff, #bfeffd);
+  color: #012b37;
+  font-weight: 700;
+  padding: 10px
+}
+
+.cards-area {
+  height: 220px;
+  /* altura fixa igual à das cartas */
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .assembly-area {
-  height: 220px;   /* mesma altura */
+  height: 220px;
+  /* mesma altura */
   min-width: 700px;
   display: flex;
   gap: 14px;
   align-items: center;
-  padding: 0 18px;   /* remove padding vertical, só lateral */
+  padding: 0 18px;
+  /* remove padding vertical, só lateral */
   border-radius: 12px;
-  border: 2px dashed rgba(255,255,255,0.06);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.01));
+  border: 2px dashed rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(0, 0, 0, 0.01));
   overflow-x: auto;
   overflow-y: hidden;
   flex-wrap: nowrap;
 }
-.assembly-hint{ color:rgba(232,251,255,0.6); width:100%; text-align:center; padding:12px;}
+
+.assembly-hint {
+  color: rgba(232, 251, 255, 0.6);
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+}
 
 
-.controls{ display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:6px; flex-wrap:wrap }
-.left-controls{ display:flex; gap:12px; align-items:center }
-.btn{ background: linear-gradient(180deg,#00c8ff,#0077be); color:white; padding:10px 14px; border-radius:10px; border:0; font-weight:700; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.35) }
-.btn.alt{ background: linear-gradient(180deg,#ffd28a,#ff9b3a); color:#06231e }
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  flex-wrap: wrap
+}
 
-.score{ font-weight:700; margin-left:auto; color:#eaf6ff }
+.left-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center
+}
+
+.btn {
+  background: linear-gradient(180deg, #00c8ff, #0077be);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 0;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35)
+}
+
+.btn.alt {
+  background: linear-gradient(180deg, #ffd28a, #ff9b3a);
+  color: #06231e
+}
+
+.score {
+  font-weight: 700;
+  margin-left: auto;
+  color: #eaf6ff
+}
 
 
-.toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:34px; background:rgba(0,0,0,0.6); padding:12px 18px; border-radius:999px; color:white; font-weight:700; opacity:0; transition:opacity .2s; z-index:99 }
-.toast.show{ opacity:1 }
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 34px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 12px 18px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 99
+}
+
+.toast.show {
+  opacity: 1
+}
 
 
 .credits {
-  position: relative;       /* não fixa mais na tela */
-  margin: 20px auto 10px auto; /* distância do topo e do final, centralizado */
+  position: relative;
+  /* não fixa mais na tela */
+  margin: 20px auto 10px auto;
+  /* distância do topo e do final, centralizado */
   font-size: 0.85rem;
-  color: rgba(255,255,255,0.9);
-  background: rgba(0,0,0,0.16);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.16);
   padding: 8px 10px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   text-align: center;
-  max-width: 300px;         /* opcional, limita a largura */
+  max-width: 300px;
+  /* opcional, limita a largura */
   bottom: -6%;
 }
 
 
-.bubbles{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
-.bubble{ position:absolute; bottom:-120px; background:rgba(255,255,255,0.04); border-radius:50%; box-shadow: inset -6px -6px 20px rgba(0,0,0,0.12); animation: rise linear infinite }
-@keyframes rise{ 0%{ transform:translateY(0) } 100%{ transform:translateY(-140vh) } }
+.bubbles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden
+}
 
-@media(max-width:980px){
-  
+.bubble {
+  position: absolute;
+  bottom: -120px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 50%;
+  box-shadow: inset -6px -6px 20px rgba(0, 0, 0, 0.12);
+  animation: rise linear infinite
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(0)
+  }
+
+  100% {
+    transform: translateY(-140vh)
+  }
+}
+
+@media(max-width:980px) {
+
   .assembly-area {
     min-width: auto;
     min-height: 200px;
@@ -134,16 +302,16 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
 
 .bubbles {
   position: fixed;
-  inset: 0;               
-  pointer-events: none;   
+  inset: 0;
+  pointer-events: none;
   overflow: hidden;
-  z-index: 0;             
+  z-index: 0;
 }
 
 
 .bubble {
   position: absolute;
-  bottom: -100px;                 
+  bottom: -100px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   animation: rise 8s linear infinite;
@@ -155,6 +323,7 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
     transform: translateY(0) scale(0.3);
     opacity: 1;
   }
+
   100% {
     transform: translateY(-110vh) scale(1);
     opacity: 0;
@@ -163,78 +332,100 @@ main.container{ max-width:1200px; margin:18px  0 64px 0; padding:12px 22px; disp
 
 
 .bubble:nth-child(1) {
-  width: 12px; height: 12px;
+  width: 12px;
+  height: 12px;
   left: 5%;
   animation-duration: 6s;
-  animation-delay:  0s;
+  animation-delay: 0s;
 }
+
 .bubble:nth-child(2) {
-  width: 8px; height: 8px;
+  width: 8px;
+  height: 8px;
   left: 15%;
   animation-duration: 5s;
-  animation-delay:  1.5s;
+  animation-delay: 1.5s;
 }
+
 .bubble:nth-child(3) {
-  width: 10px; height: 10px;
+  width: 10px;
+  height: 10px;
   left: 25%;
   animation-duration: 7.5s;
-  animation-delay:  0.8s;
+  animation-delay: 0.8s;
 }
+
 .bubble:nth-child(4) {
-  width: 14px; height: 14px;
+  width: 14px;
+  height: 14px;
   left: 40%;
   animation-duration: 9s;
-  animation-delay:  2s;
+  animation-delay: 2s;
 }
+
 .bubble:nth-child(5) {
-  width: 6px; height: 6px;
+  width: 6px;
+  height: 6px;
   left: 55%;
   animation-duration: 4.5s;
-  animation-delay:  3s;
+  animation-delay: 3s;
 }
+
 .bubble:nth-child(6) {
-  width: 20px; height: 20px;
+  width: 20px;
+  height: 20px;
   left: 65%;
   animation-duration: 8.5s;
-  animation-delay:  1s;
+  animation-delay: 1s;
 }
+
 .bubble:nth-child(7) {
-  width: 9px; height: 9px;
+  width: 9px;
+  height: 9px;
   left: 75%;
   animation-duration: 6.8s;
-  animation-delay:  2.5s;
+  animation-delay: 2.5s;
 }
+
 .bubble:nth-child(8) {
-  width: 11px; height: 11px;
+  width: 11px;
+  height: 11px;
   left: 85%;
   animation-duration: 7.2s;
-  animation-delay:  1.2s;
+  animation-delay: 1.2s;
 }
+
 .bubble:nth-child(9) {
-  width: 13px; height: 13px;
+  width: 13px;
+  height: 13px;
   left: 90%;
   animation-duration: 9.3s;
-  animation-delay:  0.4s;
+  animation-delay: 0.4s;
 }
+
 .bubble:nth-child(10) {
-  width: 7px; height: 7px;
+  width: 7px;
+  height: 7px;
   left: 50%;
   animation-duration: 5.6s;
-  animation-delay:  2.8s;
+  animation-delay: 2.8s;
 }
+
 :root {
-  --ocean2: #0077be; /* a cor do seu fundo superior */
+  --ocean2: #0077be;
+  /* a cor do seu fundo superior */
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #0077b6; /* cor de fundo do mar */
+  background-color: #0077b6;
+  /* cor de fundo do mar */
 }
 
 
-:root{
-  
+:root {
+
   --site-blue: #0a4e7a;
 }
 
@@ -243,6 +434,7 @@ body {
   cursor: pointer;
   accent-color: var(--accent);
 }
+
 .ocean {
   position: fixed;
   bottom: 0;
@@ -258,12 +450,14 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 18vh; /* relativo ao tamanho da tela */
+  height: 18vh;
+  /* relativo ao tamanho da tela */
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
   user-select: none;
 }
+
 .ocean {
   position: fixed;
   bottom: 0;
@@ -304,7 +498,7 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 180px; 
+  height: 180px;
   pointer-events: none;
   overflow: hidden;
   z-index: 1;
@@ -315,7 +509,7 @@ body {
   position: absolute;
   top: 65px;
   left: 20px;
-  width: 90px; 
+  width: 90px;
   height: auto;
 }
 
@@ -329,13 +523,14 @@ body {
   transform: scaleY(-1);
   position: relative;
   width: 100%;
-  height: 12vh; /* relativo à tela */
+  height: 12vh;
+  /* relativo à tela */
   overflow: hidden;
 }
 
 .wave {
   display: flex;
-  width: 200%;         
+  width: 200%;
   animation: slide 8s linear infinite;
   will-change: transform;
   transform: translate3d(0, 0, 0);
@@ -354,6 +549,7 @@ body {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -366,34 +562,46 @@ body {
     text-align: center;
     gap: 8px;
   }
+
   header h1 {
     margin: 0;
     font-size: 1.2rem;
   }
+
   header .subtitle {
     margin: 0;
     font-size: 0.9rem;
   }
-  .left-col, .right-col {
+
+  .left-col,
+  .right-col {
     flex: 1 1 100%;
   }
+
   .cards-area {
     gap: 8px;
   }
+
   .card {
-    flex-shrink: 0;     /* não deixa encolher */
+    flex-shrink: 0;
+    /* não deixa encolher */
     width: 120px;
     height: 160px;
   }
-   .cards-area {
-    height: 180px; /* cartas menores, mesma altura */
+
+  .cards-area {
+    height: 180px;
+    /* cartas menores, mesma altura */
   }
+
   .assembly-area {
-    height: 180px; /* mesma altura */
+    height: 180px;
+    /* mesma altura */
     min-width: auto;
     flex-wrap: nowrap;
     justify-content: flex-start;
-    padding: 0 10px; /* sem padding vertical */
+    padding: 0 10px;
+    /* sem padding vertical */
   }
 
   .controls {
@@ -404,20 +612,24 @@ body {
 
 
 @media (max-width: 480px) {
-  
+
   .card {
-    flex-shrink: 0;     /* não deixa encolher */
+    flex-shrink: 0;
+    /* não deixa encolher */
     width: 100px;
     height: 140px;
   }
+
   .cards-area {
     height: 160px;
   }
+
   .assembly-area {
     height: 160px;
     padding: 0 8px;
     gap: 8px;
   }
+
   #volume-slider {
     width: 80px;
   }
@@ -426,41 +638,63 @@ body {
 
 @media (orientation: landscape) and (max-height: 520px) {
 
-  html, body {
+  html,
+  body {
     height: auto;
     min-height: 100%;
     overflow-y: auto !important;
   }
-  body { transform: none !important; }
 
-  header { padding: 8px 12px; gap: 8px; }
-  .logo-container { position: static; width: px; }
+  body {
+    transform: none !important;
+  }
+
+  header {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .logo-container {
+    position: static;
+    width: px;
+  }
+
   header h1 {
     margin: 0 !important;
     font-size: clamp(0.9rem, 3.2vw, 1.1rem);
   }
+
   header .subtitle {
     margin: 0 !important;
     font-size: clamp(0.68rem, 2.4vw, 0.9rem);
   }
 
-  main.container { gap: 12px; margin: 8px 0 18px 0; padding: 8px 10px; }
-  
-  .left-col, .right-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  main.container {
+    gap: 12px;
+    margin: 8px 0 18px 0;
+    padding: 8px 10px;
+  }
+
+  .left-col,
+  .right-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .card {
     width: clamp(76px, 14vw, 110px);
     height: clamp(105px, 20vw, 150px);
   }
-  .placeholder { font-size: 0.75rem; }
+
+  .placeholder {
+    font-size: 0.75rem;
+  }
 
   .cards-area {
     height: 140px;
   }
+
   .assembly-area {
     height: 140px;
     min-width: auto !important;
@@ -470,39 +704,74 @@ body {
     justify-content: flex-start;
   }
 
-  .assembly-hint { font-size: 0.8rem; }
+  .assembly-hint {
+    font-size: 0.8rem;
+  }
 
-  .controls { gap: 8px; }
-  .btn { padding: 8px 10px; font-size: 0.85rem; }
-  .score { font-size: 0.9rem; }
-  #volume-slider { width: 80px; }
+  .controls {
+    gap: 8px;
+  }
+
+  .btn {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .score {
+    font-size: 0.9rem;
+  }
+
+  #volume-slider {
+    width: 80px;
+  }
 
   .panel {
-  position: relative; /* necessário para posicionamento absoluto do timer */
-  padding: 16px;      /* espaço interno */
-}
+    position: relative;
+    /* necessário para posicionamento absoluto do timer */
+    padding: 16px;
+    /* espaço interno */
+  }
 
 }
 
 @media (orientation: landscape) and (max-height: 420px) {
-  .card { 
-    flex-shrink: 0;     /* não deixa encolher */
-    width: clamp(68px, 12vw, 96px); height: clamp(90px, 17vw, 130px); }
-  .assembly-area { min-height: 24vh; }
-  .btn { padding: 6px 8px; font-size: 0.8rem; }
-  header h1 { font-size: clamp(0.82rem, 3vw, 1rem); }
+  .card {
+    flex-shrink: 0;
+    /* não deixa encolher */
+    width: clamp(68px, 12vw, 96px);
+    height: clamp(90px, 17vw, 130px);
+  }
+
+  .assembly-area {
+    min-height: 24vh;
+  }
+
+  .btn {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+
+  header h1 {
+    font-size: clamp(0.82rem, 3vw, 1rem);
+  }
 }
 
 .panel {
-  position: relative; /* necessário para que o timer seja posicionado em relação ao painel */
-  padding: 16px;      /* deixa espaço interno para o conteúdo */
+  position: relative;
+  /* necessário para que o timer seja posicionado em relação ao painel */
+  padding: 16px;
+  /* deixa espaço interno para o conteúdo */
 }
 
 #timer-desktop {
-  position: absolute;  /* posiciona dentro do painel */
-  top: 8px;            /* distância do topo do painel */
-  right: 8px;          /* distância da direita do painel */
-  background: rgba(0,0,0,0.2); /* opcional, deixa legível */
+  position: absolute;
+  /* posiciona dentro do painel */
+  top: 8px;
+  /* distância do topo do painel */
+  right: 8px;
+  /* distância da direita do painel */
+  background: rgba(0, 0, 0, 0.2);
+  /* opcional, deixa legível */
   color: #fff;
   padding: 4px 8px;
   border-radius: 6px;
@@ -525,50 +794,74 @@ body {
 }
 
 #controles {
-  margin: 20px auto;       /* espaço acima/baixo e centraliza horizontalmente */
+  margin: 20px auto;
+  /* espaço acima/baixo e centraliza horizontalmente */
   max-width: 800px;
-  width: 90%;              /* responsivo */
-  display: flex;           /* organiza os botões */
-  justify-content: center; /* centraliza os controles internamente */
+  width: 90%;
+  /* responsivo */
+  display: flex;
+  /* organiza os botões */
+  justify-content: center;
+  /* centraliza os controles internamente */
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  gap: 8px;                /* espaço entre os botões */
+  background: rgba(255, 255, 255, 0.05);
+  gap: 8px;
+  /* espaço entre os botões */
 }
 
 main.container {
-  display: flex;              /* organiza as colunas lado a lado */
-  justify-content: center;    /* centraliza horizontalmente no meio da tela */    /* alinha ao topo (ou center se quiser verticalmente) */
-  gap: 20px;                  /* espaço entre as duas colunas */
-  margin: 0 auto;             /* garante centralização no fluxo normal */
-  padding: 20px 0;            /* espaço acima/baixo */
-  flex-direction: row;    /* permite quebrar em telas pequenas */
+  display: flex;
+  /* organiza as colunas lado a lado */
+  justify-content: center;
+  /* centraliza horizontalmente no meio da tela */
+  /* alinha ao topo (ou center se quiser verticalmente) */
+  gap: 20px;
+  /* espaço entre as duas colunas */
+  margin: 0 auto;
+  /* garante centralização no fluxo normal */
+  padding: 20px 0;
+  /* espaço acima/baixo */
+  flex-direction: row;
+  /* permite quebrar em telas pequenas */
   padding: 0 16px;
 }
 
-@media (min-width: 801px) {  /* só aplica em telas maiores que 800px */
+@media (min-width: 801px) {
+
+  /* só aplica em telas maiores que 800px */
   main.container {
-    margin-top: 80px; /* empurra para baixo */
+    margin-top: 80px;
+    /* empurra para baixo */
   }
+
   #cards-container,
   #drop-zone {
-  display: flex;            /* ativa flexbox */
-  justify-content: center;  /* centraliza horizontalmente */
-  flex-wrap: wrap;          /* quebra linha se necessário */
-  gap: 12px;                /* espaço entre as cartas */
-}
+    display: flex;
+    /* ativa flexbox */
+    justify-content: center;
+    /* centraliza horizontalmente */
+    flex-wrap: wrap;
+    /* quebra linha se necessário */
+    gap: 12px;
+    /* espaço entre as cartas */
+  }
 }
 
 #dicas {
-  margin: 20px auto;       /* espaço acima/baixo e centraliza horizontalmente */
+  margin: 20px auto;
+  /* espaço acima/baixo e centraliza horizontalmente */
   max-width: 70%;
-  width: 90%;              /* responsivo */
-  display: flex;           /* organiza os botões */
-  justify-content: center; /* centraliza os controles internamente */
+  width: 90%;
+  /* responsivo */
+  display: flex;
+  /* organiza os botões */
+  justify-content: center;
+  /* centraliza os controles internamente */
   padding: 12px;
   border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  gap: 8px;  
+  background: rgba(255, 255, 255, 0.05);
+  gap: 8px;
 }
 
 /* Timer mobile: inicialmente escondido */
@@ -576,7 +869,7 @@ main.container {
   display: none;
   text-align: center;
   margin-bottom: 12px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   color: #fff;
   padding: 6px 12px;
   border-radius: 10px;
@@ -589,15 +882,18 @@ main.container {
   #timer-desktop {
     display: none;
   }
+
   #timer-mobile {
     display: block;
   }
 }
 
-@media (min-width: 414px) and (max-width: 896px) {  /* largura típica iPhone Plus/Max */
+@media (min-width: 414px) and (max-width: 896px) {
+  /* largura típica iPhone Plus/Max */
 
   .card {
-    width: 22%;  /* cada carta ocupa 20% do container */
+    width: 22%;
+    /* cada carta ocupa 20% do container */
     height: auto;
   }
 }
@@ -611,23 +907,40 @@ main.container {
   transition: opacity 0.3s ease;
 }
 
-.flash.correct { background: rgba(0, 255, 100, 0.25); }   /* verde claro */
-.flash.wrong   { background: rgba(255, 0, 0, 0.25); }     /* vermelho */
-.flash.hint    { background: rgba(0, 150, 255, 0.25); }   /* azul para aviso */
+.flash.correct {
+  background: rgba(0, 255, 100, 0.25);
+}
+
+/* verde claro */
+.flash.wrong {
+  background: rgba(255, 0, 0, 0.25);
+}
+
+/* vermelho */
+.flash.hint {
+  background: rgba(0, 150, 255, 0.25);
+}
+
+/* azul para aviso */
 
 
 .toast.correct {
-  background: #00ff66;   /* verde */
-  color: #012b37;         /* letra escura */
+  background: #00ff66;
+  /* verde */
+  color: #012b37;
+  /* letra escura */
 }
 
 .toast.wrong {
-  background: #ff4c4c;   /* vermelho */
-  color: #fff;            /* letra clara */
+  background: #ff4c4c;
+  /* vermelho */
+  color: #fff;
+  /* letra clara */
 }
 
 .toast.hint {
-  background: #00bfff;   /* azul */
+  background: #00bfff;
+  /* azul */
   color: #fff;
 }
 
@@ -636,14 +949,14 @@ main.container {
 .card-fallback {
   position: fixed !important;
   left: var(--x, -9999px);
-  top:  var(--y, -9999px);
+  top: var(--y, -9999px);
   /* centraliza o ponto (left/top) no centro do clone */
   transform: translate(-50%, -50%) scale(1.06);
   will-change: transform, left, top;
   transition: none !important;
   pointer-events: none !important;
   z-index: 9999 !important;
-  box-shadow: 0 18px 36px rgba(0,0,0,0.6);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.6);
 }
 
 /* O item “fantasma” dentro da lista (aquele espaço reservado) */
@@ -658,7 +971,9 @@ main.container {
 
 /* Ajuda o touch a ser suave no mobile */
 @media (max-width: 900px) {
-  .card { touch-action: none; }
+  .card {
+    touch-action: none;
+  }
 }
 
 .no-scroll {
@@ -671,9 +986,11 @@ main.container {
   .ocean {
     height: 15vh;
   }
+
   .wave-wrapper {
     height: 10vh;
   }
+
   main.container {
     flex-direction: row;
     align-items: flex-start;
@@ -684,54 +1001,383 @@ main.container {
 
 /* iPad e tablets médios (retrato/paisagem) */
 @media (min-width: 768px) and (max-width: 1200px) {
-  main.container { gap: 12px !important; padding: 12px 10px !important; flex-wrap: nowrap !important; }
+  main.container {
+    gap: 12px !important;
+    padding: 12px 10px !important;
+    flex-wrap: nowrap !important;
+  }
 
   /* usar porcentagem para caber lado a lado */
-  .left-col, .right-col { 
-    flex: 0 0 50% !important; 
-    max-width: 50% !important; 
+  .left-col,
+  .right-col {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
   }
 
   /* permitir encolher dentro da coluna */
-  .assembly-area { 
-    min-width: 0 !important; 
-    width: 100% !important; 
-    height: 180px !important; 
+  .assembly-area {
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 180px !important;
   }
 
-  .cards-area { height: 180px !important; }
+  .cards-area {
+    height: 180px !important;
+  }
 
   /* cartas um pouco menores para caber no mesmo plano */
-  .card { 
+  .card {
     height: auto;
-    width: 20%;  /* cada carta ocupa 20% do container */
+    width: 20%;
+    /* cada carta ocupa 20% do container */
   }
 
-  .logo-container { position: static; width: px; }
-  
+  .logo-container {
+    position: static;
+    width: px;
+  }
+
 }
 
 /* tablets grandes (ex.: 1024–1366 de largura, ex. iPad Air/Pro e 1280x800) */
 @media (min-width: 1201px) and (max-width: 1366px) {
-  main.container { gap: 14px !important; flex-wrap: nowrap !important; }
-
-  .left-col, .right-col { 
-    flex: 0 0 50% !important; 
-    max-width: 50% !important; 
+  main.container {
+    gap: 14px !important;
+    flex-wrap: nowrap !important;
   }
 
-  .assembly-area { 
-    min-width: 0 !important; 
-    width: 100% !important; 
-    height: 190px !important; 
+  .left-col,
+  .right-col {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
   }
 
-  .cards-area { height: 190px !important; }
+  .assembly-area {
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 190px !important;
+  }
 
-  .card { 
+  .cards-area {
+    height: 190px !important;
+  }
+
+  .card {
     height: auto;
-    width: 20%;  /* cada carta ocupa 20% do container */
+    width: 20%;
+    /* cada carta ocupa 20% do container */
   }
-  
-  .logo-container { position: static; width: px; }
+
+  .logo-container {
+    position: static;
+    width: px;
+  }
+}
+
+/* --- ESTILOS PARA O SLIDER DE NOTÍCIAS --- */
+#news-slider-container {
+  max-width: 70%;
+  margin: 20px auto;
+  width: 90%;
+  padding: 16px;
+}
+
+.swiper {
+  width: 100%;
+  height: 220px;
+  /* Altura do slider */
+  border-radius: 10px;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.swiper-slide a:hover img {
+  transform: scale(1.05);
+}
+
+.slide-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
+  color: white;
+  padding: 24px 10px 10px 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+}
+
+/* Cores das setas e da paginação para combinar com o site */
+.swiper-button-next,
+.swiper-button-prev {
+  color: var(--accent);
+  /* Usa a cor de destaque do seu site */
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--accent);
+}
+
+.credits {
+  text-align: center;
+  flex-direction: row;
+}
+
+/* Garante que o link preencha o slide e a imagem cubra corretamente */
+.swiper-slide a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Opcional: deixa a legenda sobre um degradê no rodapé da imagem */
+.swiper-slide .slide-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px;
+  color: #fff;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.0) 100%);
+  font-family: 'Poppins', Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* ---------- AJUSTES RESPONSIVOS ADICIONAIS (cole no final do style.css) ---------- */
+
+/* Celulares (pequenos) — até 539px */
+@media (max-width: 539px) {
+
+  /* slider mais baixo em phones */
+  .swiper {
+    height: 150px !important;
+    border-radius: 10px;
+  }
+
+  /* legenda menor e com menos padding para não cobrir tanto a imagem */
+  .slide-title {
+    font-size: 0.78rem !important;
+    padding: 8px 10px !important;
+    line-height: 1.05 !important;
+  }
+
+  /* imagens prefira contain se tiver fallback SVG, mas cover normalmente */
+  .swiper-slide img {
+    object-fit: cover !important;
+    object-position: center center;
+  }
+
+  /* setas escondidas em telas de toque pequenas (gestos + paginação) */
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
+
+  /* bolinhas maiores e mais tocáveis */
+  .swiper-pagination-bullet {
+    width: 9px;
+    height: 9px;
+    opacity: 0.85;
+  }
+
+  .swiper-pagination-bullet-active {
+    width: 18px;
+    height: 9px;
+    border-radius: 999px;
+  }
+
+  /* reduz margin/padding do container para caber */
+  #news-slider-container {
+    width: 96% !important;
+    padding: 6px !important;
+  }
+}
+
+/* Phones maiores / Phablets (540px a 767px) */
+@media (min-width: 540px) and (max-width: 767px) {
+  .swiper {
+    height: 190px !important;
+  }
+
+  .slide-title {
+    font-size: 0.9rem !important;
+    padding: 12px 12px !important;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
+
+  /* manter sem setas para toque */
+  .swiper-pagination-bullet {
+    width: 9px;
+    height: 9px;
+  }
+
+  .swiper-pagination-bullet-active {
+    width: 20px;
+    height: 9px;
+  }
+
+  #news-slider-container {
+    width: 94% !important;
+    padding: 8px !important;
+  }
+}
+
+/* Tablets em retrato (768px a 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .swiper {
+    height: 220px !important;
+  }
+
+  .slide-title {
+    font-size: 0.98rem !important;
+    padding: 14px 14px !important;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: block !important;
+    width: 40px;
+    height: 40px;
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 16px;
+  }
+
+  .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+  }
+
+  .swiper-pagination-bullet-active {
+    width: 18px;
+    height: 8px;
+  }
+
+  #news-slider-container {
+    max-width: 900px !important;
+    width: 92% !important;
+  }
+}
+
+/* Landscape em telefones (quando a altura for pequena) */
+@media (orientation: landscape) and (max-height: 420px) {
+  .swiper {
+    height: 120px !important;
+  }
+
+  .slide-title {
+    font-size: 0.78rem !important;
+    padding: 8px 10px !important;
+  }
+}
+
+/* Segurança: se a imagem for SVG de fallback (data:) manter object-fit: contain para não distorcer */
+.swiper-slide img[src^="data:image/svg+xml"] {
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02));
+}
+
+
+/* Créditos: alinhamento horizontal, espaçamento e responsividade */
+.credits {
+  display: flex;
+  gap: 10px;
+  /* espaço entre itens */
+  align-items: center;
+  /* alinha verticalmente */
+  justify-content: center;
+  /* centraliza horizontalmente */
+  color: rgba(234, 246, 255, 0.95);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Texto do autor (não necessariamente necessário, mas útil para custom) */
+.credits-author {
+  white-space: nowrap;
+}
+
+/* Ícone do Instagram */
+.credits-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+  margin: 0 4px;
+}
+
+/* Username/link */
+.credits-username {
+  color: inherit;
+  /* herda a cor do .credits */
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* hover/focus do link */
+.credits-username:hover,
+.credits-username:focus {
+  text-decoration: underline;
+  color: var(--accent);
+  /* usa sua cor de destaque */
+  outline: none;
+}
+
+/* Pequenos ajustes para telas muito pequenas: empilha verticalmente */
+@media (max-width: 420px) {
+  .credits {
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.88rem;
+  }
+
+  .credits-icon {
+    width: 18px;
+    height: 18px;
+  }
 }

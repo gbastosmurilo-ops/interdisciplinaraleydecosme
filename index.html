@@ -7,6 +7,8 @@
   <title>Cadeia Alimentar Marinha — Jogo</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
   <link rel="stylesheet" href="style.css">
@@ -62,8 +64,8 @@
     <div class="logo-container" style="left: 48%; margin-top: -40px;">
       <img src="R.png" alt="Logo" class="logo">
     </div>
-      <h1>Cadeia Alimentar Marinha</h1>
-      <div class="subtitle">Arraste — Reordene — Verifique. Monte a sequência correta.</div>
+    <h1>Cadeia Alimentar Marinha</h1>
+    <div class="subtitle">Arraste — Reordene — Verifique. Monte a sequência correta.</div>
   </header>
 
   <div id="timer-mobile">Tempo: 30s</div>
@@ -109,16 +111,65 @@
     </p>
   </div>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <div class="credits">Feito por Murilo Gonçalves Bastos </div>
+  <div id="news-slider-container" class="panel">
+    <h3 style="margin: 0 0 12px 0; text-align: center;">Notícias do Oceano</h3>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <a href="https://g1.globo.com/mundo/noticia/2025/06/09/oceanos-estao-a-beira-da-morte-ainda-da-tempo-de-salva-los.ghtml"
+            target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Phytoplankton.jpg"
+              alt="Fitoplâncton (imagem NASA/Wikimedia)">
+            <div class="slide-title">Base da cadeia: fitoplâncton — fonte e reportagem.</div>
+          </a>
+        </div>
 
+        <div class="swiper-slide">
+          <a href="https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2024-10/brasil-lanca-por-ano-13-milhao-de-toneladas-de-plastico-no-oceano"
+            target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/74/Microplastic.jpg"
+              alt="Microplásticos (imagem Wikimedia)">
+            <div class="slide-title">Microplásticos: impacto e contaminação costeira.</div>
+          </a>
+        </div>
+
+        <div class="swiper-slide">
+          <a href="https://brasil.mongabay.com/2024/10/estudos-indicam-contaminacao-generalizada-por-microplastico-no-litoral-brasileiro/"
+            target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/School_of_fish.jpg"
+              alt="Cardume de peixes (imagem Wikimedia)">
+            <div class="slide-title">Cardumes e cadeias alimentares — impactos em peixes.</div>
+          </a>
+        </div>
+
+        <div class="swiper-slide">
+          <a href="https://www.embrapa.br/busca-de-noticias/-/noticia/101194207/artigo--poluicao-por-plastico-um-desafio-global"
+            target="_blank" rel="noopener noreferrer">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Green_Sea_Turtle_%2831041167698%29.jpg"
+              alt="Tartaruga marinha (imagem Wikimedia)">
+            <div class="slide-title">Tartarugas e resíduos marinhos — poluição por plástico.</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- --- Fim: slides recomendados --- -->
+
+  </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div class="credits">Feito por Murilo Gonçalves Bastos <img src="logoinstagram.png" alt="logoinstagram"
+      style="width: 20px; display: flexbox; margin: auto; "> murilo.gbs</div>
   <audio id="background-music" loop preload="auto" src="musica.fundo.mp3"></audio>
   <script src="https://cdn.jsdelivr.net/gh/bernardo-castilho/DragDropTouch/dragdroptouch.min.js"></script>
-  <script src="script.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script src="script.js"></script>
 </body>
 
 <div id="flash-overlay" class="flash"></div>
-
 
 </html>

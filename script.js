@@ -37,6 +37,11 @@ const toast = document.getElementById('toast');
 const scoreBoard = document.getElementById('scoreboard');
 const music = document.getElementById('background-music');
 
+// evita ReferenceError caso variáveis de som não existam
+let dragSoundUrl = null;
+let dropSoundUrl = null;
+let correctSoundUrl = null;
+let wrongSoundUrl = null;
 
 let score = 0;
 let effectsOn = false;
@@ -199,71 +204,71 @@ let _mobileTouchMoveHandler = null; // referência pra remover o listener depois
 
 function enableSortables() {
   // destrói sortables anteriores
-  if (sortableCards) try { sortableCards.destroy(); } catch (e) {}
-  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) {}
+  if (sortableCards) try { sortableCards.destroy(); } catch (e) { }
+  if (sortableAssembly) try { sortableAssembly.destroy(); } catch (e) { }
 
   // garante remover handler anterior caso algo falhou antes
   if (_mobileTouchMoveHandler) {
-    try { document.removeEventListener('touchmove', _mobileTouchMoveHandler); } catch (e) {}
+    try { document.removeEventListener('touchmove', _mobileTouchMoveHandler); } catch (e) { }
     _mobileTouchMoveHandler = null;
   }
 
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-const body = document.body;
+  const body = document.body;
 
-const baseOpts = {
-  group: 'shared',
-  animation: 180,
-  swapThreshold: 0.6,
-  fallbackOnBody: true,
-  forceFallback: isMobile,
-  ghostClass: 'card-ghost',
-  chosenClass: 'card-chosen',
-  fallbackClass: 'card-fallback',
-  onStart: () => {
-    playSound('drag');
-    if (isMobile) {
-      // trava scroll da página
-      body.classList.add('no-scroll');
-    }
-  },
-  onClone: (evt) => {
-    activeGhost = evt.clone;
-    activeGhost.style.width = evt.item.offsetWidth + 'px';
-    activeGhost.style.height = evt.item.offsetHeight + 'px';
-
-    if (lastTouchPoint) {
-      activeGhost.style.setProperty('--x', lastTouchPoint.clientX + 'px');
-      activeGhost.style.setProperty('--y', lastTouchPoint.clientY + 'px');
-    }
-
-    // atualiza posição durante arraste
-    _mobileTouchMoveHandler = function (e) {
-      if (!activeGhost || !e.touches || !e.touches[0]) return;
-      const t = e.touches[0];
-      activeGhost.style.setProperty('--x', t.clientX + 'px');
-      activeGhost.style.setProperty('--y', t.clientY + 'px');
-      if (e.cancelable) e.preventDefault(); // impede scroll
-    };
-    document.addEventListener('touchmove', _mobileTouchMoveHandler, { passive: false });
-
-    const cleanup = () => {
-      if (_mobileTouchMoveHandler) {
-        document.removeEventListener('touchmove', _mobileTouchMoveHandler);
-        _mobileTouchMoveHandler = null;
+  const baseOpts = {
+    group: 'shared',
+    animation: 180,
+    swapThreshold: 0.6,
+    fallbackOnBody: true,
+    forceFallback: isMobile,
+    ghostClass: 'card-ghost',
+    chosenClass: 'card-chosen',
+    fallbackClass: 'card-fallback',
+    onStart: () => {
+      playSound('drag');
+      if (isMobile) {
+        // trava scroll da página
+        body.classList.add('no-scroll');
       }
-    };
-    document.addEventListener('touchend', cleanup, { once: true, passive: true });
-    document.addEventListener('touchcancel', cleanup, { once: true, passive: true });
-  },
-  onEnd: () => {
-    activeGhost = null;
-    if (isMobile) {
-      body.classList.remove('no-scroll'); // libera scroll
-    }
-  },
-};
+    },
+    onClone: (evt) => {
+      activeGhost = evt.clone;
+      activeGhost.style.width = evt.item.offsetWidth + 'px';
+      activeGhost.style.height = evt.item.offsetHeight + 'px';
+
+      if (lastTouchPoint) {
+        activeGhost.style.setProperty('--x', lastTouchPoint.clientX + 'px');
+        activeGhost.style.setProperty('--y', lastTouchPoint.clientY + 'px');
+      }
+
+      // atualiza posição durante arraste
+      _mobileTouchMoveHandler = function (e) {
+        if (!activeGhost || !e.touches || !e.touches[0]) return;
+        const t = e.touches[0];
+        activeGhost.style.setProperty('--x', t.clientX + 'px');
+        activeGhost.style.setProperty('--y', t.clientY + 'px');
+        if (e.cancelable) e.preventDefault(); // impede scroll
+      };
+      document.addEventListener('touchmove', _mobileTouchMoveHandler, { passive: false });
+
+      const cleanup = () => {
+        if (_mobileTouchMoveHandler) {
+          document.removeEventListener('touchmove', _mobileTouchMoveHandler);
+          _mobileTouchMoveHandler = null;
+        }
+      };
+      document.addEventListener('touchend', cleanup, { once: true, passive: true });
+      document.addEventListener('touchcancel', cleanup, { once: true, passive: true });
+    },
+    onEnd: () => {
+      activeGhost = null;
+      if (isMobile) {
+        body.classList.remove('no-scroll'); // libera scroll
+      }
+    },
+  };
 
   sortableCards = new Sortable(cardsContainer, baseOpts);
 
@@ -278,95 +283,117 @@ const baseOpts = {
 }
 
 
-  function verifyChain() {
-    const placed = Array.from(dropZone.querySelectorAll('.card'));
+function verifyChain() {
+  const placed = Array.from(dropZone.querySelectorAll('.card'));
 
-    if (placed.length !== 4) {
-      showToast('Coloque as 4 cartas na área de montagem!', 'hint'); // toast azul
-      playSound('wrong');
-      triggerFlash('hint', 300);     // flash azul
-      return;
-    }
-
-    const expected = ['producer', 'primary', 'secondary', 'tertiary'];
-    const levels = placed.map(c => c.dataset.level);
-    const ok = levels.join(',') === expected.join(',');
-
-    if (ok) {
-      score++;
-      scoreBoard.textContent = `Pontuação: ${score}`;
-      showToast('Parabéns! Cadeia correta!', 'correct');   // toast verde
-      playSound('correct');
-      triggerFlash('correct', 300);  // flash verde
-    } else {
-      showToast('Cadeia incorreta! Tente novamente.', 'wrong'); // toast vermelho
-      playSound('wrong');
-      triggerFlash('wrong', 300);    // flash vermelho
-    }
-
-
-    setTimeout(() => {
-      generateDeckAndRender();
-      startTimer();
-    }, 900);
+  if (placed.length !== 4) {
+    showToast('Coloque as 4 cartas na área de montagem!', 'hint'); // toast azul
+    playSound('wrong');
+    triggerFlash('hint', 300);     // flash azul
+    return;
   }
 
-  effectsToggle.addEventListener('click', () => {
-    effectsOn = !effectsOn;
-    effectsToggle.textContent = effectsOn ? 'Efeitos: On' : 'Efeitos: Off';
+  const expected = ['producer', 'primary', 'secondary', 'tertiary'];
+  const levels = placed.map(c => c.dataset.level);
+  const ok = levels.join(',') === expected.join(',');
 
-    if (effectsOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-  });
+  if (ok) {
+    score++;
+    scoreBoard.textContent = `Pontuação: ${score}`;
+    showToast('Parabéns! Cadeia correta!', 'correct');   // toast verde
+    playSound('correct');
+    triggerFlash('correct', 300);  // flash verde
+  } else {
+    showToast('Cadeia incorreta! Tente novamente.', 'wrong'); // toast vermelho
+    playSound('wrong');
+    triggerFlash('wrong', 300);    // flash vermelho
+  }
 
-  musicToggle.addEventListener('click', () => {
-    if (!musicOn) {
-      music.volume = 0.15;
-      music.play().catch(() => { });
-      musicToggle.textContent = 'Música: On';
-      musicOn = true;
-    } else {
-      music.pause();
-      musicToggle.textContent = 'Música: Off';
-      musicOn = false;
-    }
-  });
 
-  checkBtn.addEventListener('click', verifyChain);
-  newBtn.addEventListener('click', () => {
+  setTimeout(() => {
     generateDeckAndRender();
     startTimer();
-  });
+  }, 900);
+}
 
-  prepareAudio();
+effectsToggle.addEventListener('click', () => {
+  effectsOn = !effectsOn;
+  effectsToggle.textContent = effectsOn ? 'Efeitos: On' : 'Efeitos: Off';
+
+  if (effectsOn && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+});
+
+musicToggle.addEventListener('click', () => {
+  if (!musicOn) {
+    music.volume = 0.15;
+    music.play().catch(() => { });
+    musicToggle.textContent = 'Música: On';
+    musicOn = true;
+  } else {
+    music.pause();
+    musicToggle.textContent = 'Música: Off';
+    musicOn = false;
+  }
+});
+
+checkBtn.addEventListener('click', verifyChain);
+newBtn.addEventListener('click', () => {
   generateDeckAndRender();
   startTimer();
+});
 
-  (function makeBubbles() {
-    const container = document.querySelector('.bubbles');
-    if (!container) return;
-    container.innerHTML = '';
-    const count = 18;
-    for (let i = 0; i < count; i++) {
-      const b = document.createElement('div'); b.className = 'bubble';
-      const size = 10 + Math.random() * 70; b.style.width = `${size}px`; b.style.height = `${size}px`;
-      b.style.left = `${Math.random() * 100}%`; b.style.animationDuration = `${12 + Math.random() * 18}s`;
-      b.style.opacity = `${0.05 + Math.random() * 0.25}`; container.appendChild(b);
-    }
-  })();
+prepareAudio();
+generateDeckAndRender();
+startTimer();
 
-  dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyChain(); });
-
-  const volumeSlider = document.getElementById('volume-slider');
-  volumeSlider.addEventListener('input', () => {
-    music.volume = parseFloat(volumeSlider.value);
-  });
-
-  function triggerFlash(type = 'correct', duration = 300) {
-    const flash = document.getElementById('flash-overlay');
-    flash.className = `flash ${type}`;
-    flash.style.opacity = '1';
-
-    setTimeout(() => {
-      flash.style.opacity = '0';
-    }, duration);
+(function makeBubbles() {
+  const container = document.querySelector('.bubbles');
+  if (!container) return;
+  container.innerHTML = '';
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const b = document.createElement('div'); b.className = 'bubble';
+    const size = 10 + Math.random() * 70; b.style.width = `${size}px`; b.style.height = `${size}px`;
+    b.style.left = `${Math.random() * 100}%`; b.style.animationDuration = `${12 + Math.random() * 18}s`;
+    b.style.opacity = `${0.05 + Math.random() * 0.25}`; container.appendChild(b);
   }
+})();
+
+dropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyChain(); });
+
+const volumeSlider = document.getElementById('volume-slider');
+volumeSlider.addEventListener('input', () => {
+  music.volume = parseFloat(volumeSlider.value);
+});
+
+function triggerFlash(type = 'correct', duration = 300) {
+  const flash = document.getElementById('flash-overlay');
+  flash.className = `flash ${type}`;
+  flash.style.opacity = '1';
+
+  setTimeout(() => {
+    flash.style.opacity = '0';
+  }, duration);
+}
+
+const swiper = new Swiper('.swiper', {
+  loop: true,
+  autoplay: {
+    delay: 4500,
+    disableOnInteraction: false,
+  },
+  slidesPerView: 1,
+  spaceBetween: 15,
+  breakpoints: {
+    640: { slidesPerView: 2, spaceBetween: 20 },
+    800: { slidesPerView: 3, spaceBetween: 20 }
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+});
